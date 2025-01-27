@@ -1,0 +1,65 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(
+        to bottom, 
+        rgb(0, 2, 26),  /* Dark Navy Blue */
+        rgb(0, 12, 60), /* Midnight Blue */
+        rgb(3, 27, 78), /* Deep Blue */
+        rgb(6, 60, 130), /* Sapphire Blue */
+        rgb(6, 199, 218) /* Cyan-like Blue */
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.head {
+    font-family: "Bodoni Moda", serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+    font-size: 150px;
+    color: white; /* Ensure the text is visible on the gradient */
+    text-align: center;
+    margin: 0;
+}
+
+#one {
+    font-family: "Josefin Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: lighter;
+    font-style: normal;
+    font-size: 30px;
+    color: white;
+    margin-top: -10px; /* Keeps it closer to .head */
+    margin-left: -20px; /* Moves it closer to the left */
+}
+
+.get-started {
+    font-family: "Josefin Slab", serif;
+    font-size: 20px;
+    font-weight: lighter;
+    padding: 15px 30px;
+    margin-top: 30px;
+    background-color: rgb(0, 12, 60); 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.get-started:hover {
+    background-color:rgb(26, 81, 154); 
+}
+
+
+
+  
+
