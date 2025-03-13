@@ -166,6 +166,8 @@ body::before {
     z-index: 1; /* above overlays & shapes */
 }
 
+
+/* Floating effect to make the heading more lively */
 @keyframes fadeSlideDown {
     from {
         opacity: 0;
@@ -177,13 +179,16 @@ body::before {
     }
 }
 
+
+.head {
+    animation: floatEffect 4s ease-in-out infinite;
+}
+
+
 /* Floating effect for heading */
 @keyframes floatEffect {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
-}
-.head {
-    animation: floatEffect 4s ease-in-out infinite, fadeSlideDown 1.2s ease forwards 0.2s;
 }
 
 /* Subtitle (#one) Styles */
