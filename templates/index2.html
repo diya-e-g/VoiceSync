@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Back Arrow Button -->
-    <a href="index.html" class="back-btn">
+    <a href="sel_page.html" class="back-btn">
         <i class="fas fa-arrow-left"></i> 
     </a>
 
@@ -25,6 +25,9 @@
         </button>
     </div>
 
+    <!-- Full Width Waveform Canvas -->
+    <canvas id="waveform"></canvas>
+
     <!-- Stuttered Speech Text Box -->
     <textarea id="stuttered-speech" class="speech-box" placeholder="Stuttered speech will appear here..." readonly></textarea>
 
@@ -32,63 +35,125 @@
     <button id="clear-speech-btn" class="clear-btn">Get Clear Speech</button>
 
     <script>
-        // Get references to DOM elements
         const micBtn = document.getElementById('mic-btn');
         const speechBox = document.getElementById('stuttered-speech');
         const clearSpeechBtn = document.getElementById('clear-speech-btn');
+        const canvas = document.getElementById('waveform');
+        const ctx = canvas.getContext('2d');
 
-        // Check if the browser supports the Web Speech API
-        if (!('webkitSpeechRecognition' in window)) {
-            alert('Your browser does not support the Web Speech API. Please use a compatible browser like Chrome.');
-        } else {
-            // Create a new instance of SpeechRecognition
-            const recognition = new webkitSpeechRecognition();
+        let audioContext;
+        let analyser;
+        let microphone;
+        let dataArray;
+        let animationFrame;
 
-            recognition.continuous = true; // Keep listening until stopped
-            recognition.interimResults = true; // Show interim results
-            recognition.lang = 'en-US'; // Set the language
+        // Adjust canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = 100;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-            let isListening = false;
+        function startVisualization() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 2048;
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+            }
 
-            // Toggle speech recognition on mic button click
-            micBtn.addEventListener('click', () => {
-                if (isListening) {
-                    recognition.stop();
-                    micBtn.classList.remove('listening');
-                    isListening = false;
-                } else {
-                    recognition.start();
-                    micBtn.classList.add('listening');
-                    isListening = true;
-                }
-            });
-
-            // Handle speech recognition results
-            recognition.onresult = (event) => {
-                let transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript;
-                }
-                speechBox.value = transcript;
-            };
-
-            // Handle errors
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                alert('An error occurred during speech recognition: ' + event.error);
-            };
-
-            // Reset button style when recognition stops
-            recognition.onend = () => {
-                micBtn.classList.remove('listening');
-                isListening = false;
-            };
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then((stream) => {
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    microphone.connect(analyser);
+                    animateWaveform();
+                })
+                .catch((err) => {
+                    console.error("Microphone access denied:", err);
+                    alert("Please allow microphone access.");
+                });
         }
 
-        // Handle "Get Clear Speech" button click
+        function stopVisualization() {
+            if (microphone) {
+                microphone.disconnect();
+            }
+            cancelAnimationFrame(animationFrame);
+            clearCanvas();
+        }
+
+        function animateWaveform() {
+            animationFrame = requestAnimationFrame(animateWaveform);
+            analyser.getByteTimeDomainData(dataArray);
+            clearCanvas();
+            drawWaveform();
+        }
+
+        function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Completely clears the canvas
+    canvas.style.background = "none"; // Ensures the canvas background stays transparent
+}
+
+
+
+        function drawWaveform() {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#6cc7da";
+            ctx.beginPath();
+            const sliceWidth = canvas.width / dataArray.length;
+            let x = 0;
+
+            for (let i = 0; i < dataArray.length; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * canvas.height / 2;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                x += sliceWidth;
+            }
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+
+        let isListening = false;
+        const recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        micBtn.addEventListener('click', () => {
+            if (isListening) {
+                recognition.stop();
+                stopVisualization();
+                micBtn.classList.remove('listening');
+            } else {
+                recognition.start();
+                startVisualization();
+                micBtn.classList.add('listening');
+            }
+            isListening = !isListening;
+        });
+
+        recognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            speechBox.value = transcript;
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            alert('An error occurred: ' + event.error);
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('listening');
+            isListening = false;
+            stopVisualization();
+        };
+
         clearSpeechBtn.addEventListener('click', async () => {
             const stutteredText = speechBox.value;
-
             if (!stutteredText) {
                 alert('Please record some speech before processing.');
                 return;
@@ -97,22 +162,15 @@
             try {
                 const response = await fetch('http://localhost:5000/process', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: stutteredText })
                 });
 
-                if (!response.ok) {
-                    throw new Error('Error processing text: ' + response.statusText);
-                }
+                if (!response.ok) throw new Error('Error processing text');
 
                 const data = await response.json();
                 if (data.normal_text) {
-                    // Store the corrected speech in localStorage
                     localStorage.setItem('correctedSpeech', data.normal_text);
-                    
-                    // Redirect to index3.html
                     window.location.href = 'index3.html';
                 } else {
                     alert('Error: ' + (data.error || 'Unknown error'));

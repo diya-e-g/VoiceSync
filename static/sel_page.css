@@ -1,0 +1,138 @@
+/* Reset & Full Height */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Josefin Slab", serif;
+    background: linear-gradient(
+        to bottom, 
+        rgb(0, 2, 26),  /* Dark Navy Blue */
+        rgb(0, 12, 60), /* Midnight Blue */
+        rgb(3, 27, 78), /* Deep Blue */
+        rgb(6, 60, 130), /* Sapphire Blue */
+        rgb(6, 199, 218) /* Cyan-like Blue */
+    );
+}
+/* FAQ Button Container */
+.faq-container {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+/* FAQ Button */
+.faq-btn {
+    font-size: 20px; /* Adjusted font size */
+    font-weight: bold;
+    padding: 12px 24px; /* Added padding for better click area */
+    background: linear-gradient(to right, rgb(0, 12, 60), rgb(6, 60, 130)); /* Gradient background */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: "Josefin Slab", serif;
+}
+
+/* FAQ Button Hover Effect - Subtle Color Change */
+.faq-btn:hover {
+    background: linear-gradient(to right, rgb(3, 20, 70), rgb(8, 80, 160));
+    transform: scale(1.05); /* Reduced scaling for a smoother effect */
+    box-shadow: 0px 3px 8px  rgb(6, 60, 130);
+}
+
+/* Language Button Hover Effect - Subtle Color Change */
+.language-btn:hover {
+    background: linear-gradient(to right, rgb(0, 20, 80), rgb(30, 90, 160));
+    transform: scale(1.05); /* Slight increase, less aggressive */
+    box-shadow: 0px 5px 12px  rgb(0, 12, 60);
+}
+
+
+
+/* Main Container */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 80px 60px;
+    border-radius: 25px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 420px;
+}
+
+/* Heading */
+.head {
+    font-size: 38px;
+    font-weight: 300;
+    color: white;
+    margin-bottom: 30px;
+    margin-top: -20px; /* Moves the heading higher */
+    letter-spacing: 1.5px;
+}
+
+
+/* Button Group */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Language Buttons */
+.language-btn {
+    font-size: 22px;
+    font-weight: 400;
+    padding: 18px 35px;
+    background: linear-gradient(to right, rgb(0, 12, 60), rgb(26, 81, 154));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: "Josefin Slab", serif;
+}
+/* Back Button Styles */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #002060; /* Dark Blue */
+    color: white;
+    font-size: 16px;
+    font-family: "Josefin Slab", serif;
+    text-decoration: none; /* Remove underline */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.back-btn i {
+    margin-right: 5px; /* Adds spacing between icon and text */
+    font-size: 18px; /* Arrow icon size */
+}
+
+/* Hover effect for Back Button */
+.back-btn:hover {
+    background: #004080; /* Slightly lighter blue */
+    transform: scale(1.05);
+}
+
+/* Active effect for Back Button */
+.back-btn:active {
+    background: #6cc7da; /* Light Blue when pressed */
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
