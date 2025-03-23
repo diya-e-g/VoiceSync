@@ -1,0 +1,130 @@
+/* -------------------------
+   GENERAL STYLES
+------------------------- */
+body {
+    font-family: "Josefin Slab", serif;
+    background: linear-gradient(
+        270deg,
+        rgb(0, 2, 26),
+        rgb(0, 12, 60),
+        rgb(3, 27, 78),
+        rgb(6, 60, 130),
+        rgb(7, 139, 255)
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    text-align: center;
+    color: white;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Allows the page to be as tall as needed */
+    display: block; /* Ensures normal document flow */
+    position: relative;
+    overflow-x: hidden; /* Prevents horizontal overflow */
+}
+
+/* Animated gradient shift */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* White Overlay */
+body::before {
+    content: "";
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 150%;
+    height: 150%;
+    background: white;
+    opacity: 0.07;
+    clip-path: ellipse(50% 40% at 50% 50%);
+    animation: pulseShape 10s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulseShape {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(2deg);
+    }
+}
+
+/* -------------------------
+   HEADING STYLES
+------------------------- */
+h2 {
+    font-family: "Bodoni Moda", serif;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    animation: fadeSlideDown 1.2s ease forwards;
+    animation-delay: 0.2s;
+}
+
+/* Floating effect for heading */
+@keyframes fadeSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -------------------------
+   FAQ SECTION
+------------------------- */
+.faq-section {
+    max-width: 800px;
+    margin: 40px auto; /* Increased margin to ensure spacing */
+    text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* FAQ Question */
+.faq-question {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    margin: 10px 0; /* More spacing for readability */
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    transition: background 0.3s ease;
+}
+
+.faq-question:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* FAQ Answer */
+.faq-answer {
+    display: none;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/* Ensuring scrolling works */
+html {
+    scroll-behavior: smooth;
+}

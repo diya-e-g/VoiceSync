@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Page - Voice Sync</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="../static/faq.css"
+        />
+
+</head>
+<body>
+
+    <h2>Got Questions??<br>We've got answers.</h2>
+
+    <div class="faq-section">
+        <h3>General Questions</h3>
+        <div class="faq-question">What is Voice Sync, and how does it help people who stutter?</div>
+        <div class="faq-answer">Voice Sync helps people who stutter by allowing them to record their speech, convert it into non-stuttered text, and play back the corrected version to assist with fluency and confidence.</div>
+
+        <div class="faq-question">Can I use Voice Sync without an internet connection?</div>
+        <div class="faq-answer">Currently, Voice Sync requires an internet connection to process speech-to-text conversion and utilize chatbot support.</div>
+
+        <h3>Recording and Playback</h3>
+        <div class="faq-question">How do I record my voice using Voice Sync?</div>
+        <div class="faq-answer">Simply press the microphone button to start recording your speech. Once finished, Voice Sync will convert your speech to text and provide a corrected playback.</div>
+
+        <div class="faq-question">Can I edit the transcribed text before playing it back?</div>
+        <div class="faq-answer">No, you cannot manually edit the text before playing back the corrected speech.</div>
+
+        <div class="faq-question">What happens if my recording is unclear?</div>
+        <div class="faq-answer">If your recording is unclear, try speaking closer to the microphone in a quiet environment for better accuracy.</div>
+
+        <h3>Chatbot Assistance</h3>
+        <div class="faq-question">How does the chatbot help with speech improvement?</div>
+        <div class="faq-answer">The chatbot provides emotional support, encourages fluency, and offers word sequencing exercises to improve speech flow.</div>
+
+        <div class="faq-question">Can the chatbot provide real-time feedback on my speech?</div>
+        <div class="faq-answer">The chatbot offers feedback based on text input and helps users practice structured speech patterns.</div>
+
+        <div class="faq-question">Does the chatbot offer personalized encouragement?</div>
+        <div class="faq-answer">Yes, the chatbot provides personalized encouragement based on user progress and interactions.</div>
+
+        <h3>Privacy and Security</h3>
+        <div class="faq-question">Is my voice recording stored on Voice Sync’s servers?</div>
+        <div class="faq-answer">No, Voice Sync does not store voice recordings. All processing is done in real-time.</div>
+
+        <div class="faq-question">How secure is my data when using Voice Sync?</div>
+        <div class="faq-answer">Voice Sync prioritizes user privacy and uses encryption to secure data during processing.</div>
+
+        <div class="faq-question">Can I delete my recordings after using the service?</div>
+        <div class="faq-answer">Yes, you can delete any text transcriptions manually after processing.</div>
+
+        <h3>Technical Accessibility</h3>
+        <div class="faq-question">What devices and browsers are compatible with Voice Sync?</div>
+        <div class="faq-answer">Voice Sync works best on modern browsers like Chrome, Firefox, Edge, and Safari, and supports only desktops.</div>
+
+        <div class="faq-question">How do I enable microphone access for Voice Sync?</div>
+        <div class="faq-answer">Ensure that microphone permissions are granted in your browser settings when prompted.</div>
+
+        <div class="faq-question">What should I do if Voice Sync is not working properly?</div>
+        <div class="faq-answer">Try refreshing the page, checking microphone permissions, and ensuring your browser is up to date.</div>
+    </div>
+
+    <script>
+        document.querySelectorAll(".faq-question").forEach(item => {
+            item.addEventListener("click", function() {
+                let answer = this.nextElementSibling;
+                answer.style.display = answer.style.display === "block" ? "none" : "block";
+            });
+        });
+    </script>
+
+</body>
+</html>
