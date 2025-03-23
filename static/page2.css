@@ -4,21 +4,41 @@ html, body {
     height: 100%;
 }
 
+/* Animated Gradient Background */
 body {
     background: linear-gradient(
-        to bottom, 
-        rgb(0, 2, 26),  /* Dark Navy Blue */
-        rgb(0, 12, 60), /* Midnight Blue */
-        rgb(3, 27, 78), /* Deep Blue */
-        rgb(6, 60, 130), /* Sapphire Blue */
-        rgb(6, 199, 218) /* Cyan-like Blue */
+        270deg,
+        rgb(0, 2, 26),
+        rgb(0, 12, 60),
+        rgb(3, 27, 78),
+        rgb(6, 60, 130),
+        rgb(6, 199, 218)
     );
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Animated gradient shift */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Heading */
 .head {
     font-family: "Josefin Slab", serif;
     font-optical-sizing: auto;
@@ -29,7 +49,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Container for the microphone and circular gradients */
+/* Microphone Container */
 .mic-container {
     position: relative;
     display: flex;
@@ -47,7 +67,7 @@ body {
     height: 220px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(6, 199, 218, 0.2) 50%, transparent 100%);
-    z-index: -4; /* Push behind others */
+    z-index: -4;
     transform: scale(1);
     transition: transform 0.4s ease, opacity 0.4s ease;
 }
@@ -94,44 +114,44 @@ body {
 .mic-container:hover::after,
 .mic-container:hover .inner-circle1,
 .mic-container:hover .inner-circle2 {
-    transform: scale(1.2); /* Enlarges on hover */
-    opacity: 1; /* Ensure visibility */
+    transform: scale(1.2);
+    opacity: 1;
 }
 
-/* Button styles */
+/* Microphone Button */
 .mic-btn {
     background-color: transparent;
     border: none;
     padding: 15px;
     cursor: pointer;
     transition: transform 0.2s ease, filter 0.2s ease;
-    z-index: 1; /* Place above the circles */
+    z-index: 1;
 }
 
 .mic-btn:focus {
     outline: none;
 }
 
-/* Microphone icon styles */
+/* Microphone Icon */
 .mic-icon {
     font-size: 50px;
     color: white;
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-/* Hover effect for icon */
+/* Hover effect */
 .mic-btn:hover .mic-icon {
     transform: scale(1.1);
     filter: brightness(1.2);
 }
 
-/* Click effect for icon */
+/* Click effect */
 .mic-btn:active .mic-icon {
     transform: scale(0.95);
     filter: brightness(0.8);
 }
 
-/* Text area for stuttered speech */
+/* Speech Box */
 .speech-box {
     margin-top: 20px;
     width: 80%;
@@ -139,32 +159,32 @@ body {
     font-family: "Josefin Slab", serif;
     font-size: 16px;
     color: #333;
-    background: #8bcad8; /* Light Blue */
-    border: 2px solid #6cc7da; /* Matches mic-container theme */
+    background: #8bcad8;
+    border: 2px solid #6cc7da;
     border-radius: 10px;
     padding: 10px;
-    resize: none; /* Prevent resizing */
+    resize: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: left;
     overflow-y: auto;
     outline: none;
 }
+
 .speech-box::placeholder {
     color: #160770;
-    font-style:normal;
-    font-size:20px;
+    font-style: normal;
+    font-size: 20px;
     opacity: 1;
 }
 
-
-/* Button for Clear Speech */
+/* Clear Button */
 .clear-btn {
     margin-top: 15px;
     padding: 10px 20px;
     font-size: 16px;
     font-family: "Josefin Slab", serif;
     color: white;
-    background: #002060; /* Dark Blue */
+    background: #002060;
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -174,18 +194,18 @@ body {
 
 /* Hover effect for Clear Speech button */
 .clear-btn:hover {
-    background: #004080; /* Slightly lighter blue */
+    background: #004080;
     transform: scale(1.05);
 }
 
 /* Active effect for Clear Speech button */
 .clear-btn:active {
-    background: #6cc7da; /* Light Blue when pressed */
+    background: #6cc7da;
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Back Button Styles */
+/* Back Button */
 .back-btn {
     position: absolute;
     top: 20px;
@@ -193,11 +213,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #002060; /* Dark Blue */
+    background: #002060;
     color: white;
     font-size: 16px;
     font-family: "Josefin Slab", serif;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
     padding: 10px 15px;
     border: none;
     border-radius: 10px;
@@ -207,45 +227,19 @@ body {
 }
 
 .back-btn i {
-    margin-right: 5px; /* Adds spacing between icon and text */
-    font-size: 18px; /* Arrow icon size */
+    margin-right: 5px;
+    font-size: 18px;
 }
 
 /* Hover effect for Back Button */
 .back-btn:hover {
-    background: #004080; /* Slightly lighter blue */
+    background: #004080;
     transform: scale(1.05);
 }
 
 /* Active effect for Back Button */
 .back-btn:active {
-    background: #6cc7da; /* Light Blue when pressed */
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.clear-btn {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: "Josefin Slab", serif;
-    color: white;
-    background: #002060; /* Dark Blue */
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-/* Hover effect for Clear Speech button */
-.clear-btn:hover {
-    background: #004080; /* Slightly lighter blue */
-    transform: scale(1.05);
-}
-
-/* Active effect for Clear Speech button */
-.clear-btn:active {
-    background: #6cc7da; /* Light Blue when pressed */
+    background: #6cc7da;
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -254,12 +248,47 @@ body {
 #waveform {
     width: 100%;
     height: 100px;
-    background: none !important; /* Force no background */
+    background: none !important;
     border-radius: 5px;
     margin-top: 20px;
     display: block;
-    pointer-events: none; /* Ensures it doesn't interfere with other elements */
+    pointer-events: none;
 }
 
+@keyframes pulseShape {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(2deg); }
+}
 
+/* Floating Shapes */
+.floating-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
 
+.shape {
+    position: fixed;
+    bottom: -150px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    animation: floatUp 10s linear infinite;
+}
+
+.shape1 { left: 10%; width: 120px; height: 120px; animation-duration: 12s; }
+.shape2 { left: 30%; width: 80px; height: 80px; animation-duration: 9s; animation-delay: 2s; }
+.shape3 { left: 50%; width: 100px; height: 100px; animation-duration: 11s; animation-delay: 4s; }
+.shape4 { left: 70%; width: 130px; height: 130px; animation-duration: 14s; animation-delay: 1s; }
+.shape5 { left: 85%; width: 90px; height: 90px; animation-duration: 10s; animation-delay: 3s; }
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 0.2; }
+    50% { opacity: 0.4; }
+    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}

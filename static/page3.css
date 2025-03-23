@@ -2,22 +2,42 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    /*width:100%;*/
 }
 
 body {
     background: linear-gradient(
-        to bottom, 
+        270deg, 
         rgb(0, 2, 26),  /* Dark Navy Blue */
         rgb(0, 12, 60), /* Midnight Blue */
         rgb(3, 27, 78), /* Deep Blue */
         rgb(6, 60, 130), /* Sapphire Blue */
         rgb(6, 199, 218) /* Cyan-like Blue */
     );
+    background-size: 300% 300%;
+    animation: gradientShift 8s ease infinite;
+    
+
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
+/* Animated gradient shift */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 
 .head {
     font-family: "Josefin Slab", serif;
@@ -159,3 +179,42 @@ body {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+@keyframes pulseShape {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(2deg); }
+}
+
+/* Floating Shapes */
+.floating-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.shape {
+    position: fixed;
+    bottom: -150px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    animation: floatUp 10s linear infinite;
+}
+
+.shape1 { left: 10%; width: 120px; height: 120px; animation-duration: 12s; }
+.shape2 { left: 30%; width: 80px; height: 80px; animation-duration: 9s; animation-delay: 2s; }
+.shape3 { left: 50%; width: 100px; height: 100px; animation-duration: 11s; animation-delay: 4s; }
+.shape4 { left: 70%; width: 130px; height: 130px; animation-duration: 14s; animation-delay: 1s; }
+.shape5 { left: 85%; width: 90px; height: 90px; animation-duration: 10s; animation-delay: 3s; }
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 0.2; }
+    50% { opacity: 0.4; }
+    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+
