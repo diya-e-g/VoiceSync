@@ -8,28 +8,97 @@ html, body {
     justify-content: center;
     align-items: center;
     font-family: "Josefin Slab", serif;
+    
+    /* Gradient Background */
     background: linear-gradient(
-        to bottom, 
-        rgb(0, 2, 26),  /* Dark Navy Blue */
-        rgb(0, 12, 60), /* Midnight Blue */
-        rgb(3, 27, 78), /* Deep Blue */
-        rgb(6, 60, 130), /* Sapphire Blue */
-        rgb(6, 199, 218) /* Cyan-like Blue */
+        270deg,
+        rgb(0, 2, 26),
+        rgb(0, 12, 60),
+        rgb(3, 27, 78),
+        rgb(6, 60, 130),
+        rgb(6, 199, 218)
     );
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    position: relative;
+    overflow: hidden;
+
+    /*remove flexbox to avoid centering everything*/
+    display:block;
 }
-/* FAQ Button Container */
+
+/* Animated gradient shift */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* White Overlay */
+body::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: white;
+    opacity: 0.07;
+    clip-path: ellipse(50% 40% at 50% 50%);
+    animation: pulseShape 10s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulseShape {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(2deg); }
+}
+
+/* Floating Shapes */
+.floating-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.shape {
+    position: fixed;
+    bottom: -150px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    animation: floatUp 10s linear infinite;
+}
+
+.shape1 { left: 10%; width: 120px; height: 120px; animation-duration: 12s; }
+.shape2 { left: 30%; width: 80px; height: 80px; animation-duration: 9s; animation-delay: 2s; }
+.shape3 { left: 50%; width: 100px; height: 100px; animation-duration: 11s; animation-delay: 4s; }
+.shape4 { left: 70%; width: 130px; height: 130px; animation-duration: 14s; animation-delay: 1s; }
+.shape5 { left: 85%; width: 90px; height: 90px; animation-duration: 10s; animation-delay: 3s; }
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 0.2; }
+    50% { opacity: 0.4; }
+    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+
+/* FAQ Button */
 .faq-container {
     position: absolute;
     top: 20px;
     right: 30px;
 }
 
-/* FAQ Button */
 .faq-btn {
-    font-size: 20px; /* Adjusted font size */
+    font-size: 20px;
     font-weight: bold;
-    padding: 12px 24px; /* Added padding for better click area */
-    background: linear-gradient(to right, rgb(0, 12, 60), rgb(6, 60, 130)); /* Gradient background */
+    padding: 12px 24px;
+    background: linear-gradient(to right, rgb(0, 12, 60), rgb(6, 60, 130));
     color: white;
     border: none;
     border-radius: 8px;
@@ -39,23 +108,13 @@ html, body {
     font-family: "Josefin Slab", serif;
 }
 
-/* FAQ Button Hover Effect - Subtle Color Change */
 .faq-btn:hover {
     background: linear-gradient(to right, rgb(3, 20, 70), rgb(8, 80, 160));
-    transform: scale(1.05); /* Reduced scaling for a smoother effect */
-    box-shadow: 0px 3px 8px  rgb(6, 60, 130);
+    transform: scale(1.05);
+    box-shadow: 0px 3px 8px rgb(6, 60, 130);
 }
 
-/* Language Button Hover Effect - Subtle Color Change */
-.language-btn:hover {
-    background: linear-gradient(to right, rgb(0, 20, 80), rgb(30, 90, 160));
-    transform: scale(1.05); /* Slight increase, less aggressive */
-    box-shadow: 0px 5px 12px  rgb(0, 12, 60);
-}
-
-
-
-/* Main Container */
+/*Main container*/
 .container {
     background: rgba(255, 255, 255, 0.1);
     padding: 80px 60px;
@@ -64,7 +123,12 @@ html, body {
     box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
     text-align: center;
     width: 420px;
+    position: absolute; /* Absolute positioning */
+    top: 50%; /* Move down to 50% */
+    left: 50%; /* Move right to 50% */
+    transform: translate(-50%, -50%); /* Center perfectly */
 }
+
 
 /* Heading */
 .head {
@@ -72,10 +136,9 @@ html, body {
     font-weight: 300;
     color: white;
     margin-bottom: 30px;
-    margin-top: -20px; /* Moves the heading higher */
+    margin-top: -20px;
     letter-spacing: 1.5px;
 }
-
 
 /* Button Group */
 .button-group {
@@ -98,41 +161,27 @@ html, body {
     outline: none;
     font-family: "Josefin Slab", serif;
 }
-/* Back Button Styles */
+
+.language-btn:hover {
+    background: linear-gradient(to right, rgb(0, 20, 80), rgb(30, 90, 160));
+    transform: scale(1.05);
+    box-shadow: 0px 5px 12px rgb(0, 12, 60);
+}
+
+/* Back Button */
 .back-btn {
     position: absolute;
     top: 20px;
     left: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #002060; /* Dark Blue */
+    background: #002060;
     color: white;
     font-size: 16px;
-    font-family: "Josefin Slab", serif;
-    text-decoration: none; /* Remove underline */
     padding: 10px 15px;
-    border: none;
     border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: 0.3s ease;
 }
 
-.back-btn i {
-    margin-right: 5px; /* Adds spacing between icon and text */
-    font-size: 18px; /* Arrow icon size */
-}
-
-/* Hover effect for Back Button */
 .back-btn:hover {
-    background: #004080; /* Slightly lighter blue */
+    background: #004080;
     transform: scale(1.05);
-}
-
-/* Active effect for Back Button */
-.back-btn:active {
-    background: #6cc7da; /* Light Blue when pressed */
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

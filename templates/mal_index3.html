@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 3</title>
+    <link rel="stylesheet" href="../static/mal_page3.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Home Button at top right -->
+    <a href="./index.html">
+        <button class="home-btn">
+            <i class="fas fa-home"></i> Home
+        </button>
+    </a>
+
+    <!-- Back Button at top left -->
+    <a href="./mal_index2.html">
+        <button class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+    </a>
+
+    <h5 class="head">ഓരോ വാക്കിനും പ്രഭാവം നൽകൂ, അവയെ ഉജ്ജ്വലമാക്കൂ!!</h5>
+
+    <!-- Display the corrected speech in a text box -->
+    <textarea id="corrected-speech" class="speech-box" placeholder="തിരുത്തിയ വാക്കുകൾ ഇവിടെ കാണാം..."></textarea>
+
+    <!-- Gradient Divs around Play Button -->
+    <div class="play-container">
+        <div class="play-gradient">
+            <button id="play-button" class="play-btn">
+                <i class="fas fa-play play-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Get the corrected speech from localStorage
+        const correctedText = localStorage.getItem('correctedSpeech');
+
+        if (correctedText) {
+            document.getElementById('corrected-speech').value = correctedText;
+        }
+
+        // Text-to-speech functionality
+        document.getElementById('play-button').addEventListener('click', function () {
+            const text = document.getElementById('corrected-speech').value;
+
+            if (!text.trim()) {
+                alert("Please enter some text to convert to speech!");
+                return;
+            }
+
+            // Initialize SpeechSynthesis API
+            const synth = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            // Set speech properties
+            utterance.rate = 1; // Speed
+            utterance.volume = 1; // Volume
+            utterance.pitch = 1; // Pitch
+
+            synth.speak(utterance);
+        });
+    </script>
+</body>
+</html>

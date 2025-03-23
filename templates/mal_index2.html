@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2 - Speech to Text</title>
+    <link rel="stylesheet" href="../static/mal_page2.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Back Arrow Button -->
+    <a href="sel_page.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> 
+    </a>
+
+    <h5 class="head">നിങ്ങളുടെ ശബ്ദം രേഖപ്പെടുത്തുക</h5>
+
+    <!-- Mic Button with Circular Gradient Effects -->
+    <div class="mic-container">
+        <button id="mic-btn" class="mic-btn">
+            <i class="fas fa-microphone mic-icon"></i>
+        </button>
+    </div>
+
+    <!-- Full Width Waveform Canvas -->
+    <canvas id="waveform"></canvas>
+
+    <!-- Stuttered Speech Text Box -->
+    <textarea id="stuttered-speech" class="speech-box" placeholder="ഇവിടെ നിങ്ങളുടെ തടസംപരമായ സംസാരത്തെ കാണാനാകും..." readonly></textarea>
+
+    <!-- Button to Correct Speech -->
+    <button id="clear-speech-btn" class="clear-btn">സ്പഷ്ടമായ സംസാരണം നേടുക</button>
+
+    <script>
+        const micBtn = document.getElementById('mic-btn');
+        const speechBox = document.getElementById('stuttered-speech');
+        const clearSpeechBtn = document.getElementById('clear-speech-btn');
+        const canvas = document.getElementById('waveform');
+        const ctx = canvas.getContext('2d');
+
+        let audioContext;
+        let analyser;
+        let microphone;
+        let dataArray;
+        let animationFrame;
+
+        // Adjust canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = 100;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function startVisualization() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 2048;
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+            }
+
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then((stream) => {
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    microphone.connect(analyser);
+                    animateWaveform();
+                })
+                .catch((err) => {
+                    console.error("Microphone access denied:", err);
+                    alert("Please allow microphone access.");
+                });
+        }
+
+        function stopVisualization() {
+            if (microphone) {
+                microphone.disconnect();
+            }
+            cancelAnimationFrame(animationFrame);
+            clearCanvas();
+        }
+
+        function animateWaveform() {
+            animationFrame = requestAnimationFrame(animateWaveform);
+            analyser.getByteTimeDomainData(dataArray);
+            clearCanvas();
+            drawWaveform();
+        }
+
+        function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Completely clears the canvas
+    canvas.style.background = "none"; // Ensures the canvas background stays transparent
+}
+
+
+
+        function drawWaveform() {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#6cc7da";
+            ctx.beginPath();
+            const sliceWidth = canvas.width / dataArray.length;
+            let x = 0;
+
+            for (let i = 0; i < dataArray.length; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * canvas.height / 2;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                x += sliceWidth;
+            }
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+
+        let isListening = false;
+        const recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        micBtn.addEventListener('click', () => {
+            if (isListening) {
+                recognition.stop();
+                stopVisualization();
+                micBtn.classList.remove('listening');
+            } else {
+                recognition.start();
+                startVisualization();
+                micBtn.classList.add('listening');
+            }
+            isListening = !isListening;
+        });
+
+        recognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            speechBox.value = transcript;
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            alert('An error occurred: ' + event.error);
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('listening');
+            isListening = false;
+            stopVisualization();
+        };
+
+        clearSpeechBtn.addEventListener('click', async () => {
+            const stutteredText = speechBox.value;
+            if (!stutteredText) {
+                alert('Please record some speech before processing.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: stutteredText })
+                });
+
+                if (!response.ok) throw new Error('Error processing text');
+
+                const data = await response.json();
+                if (data.normal_text) {
+                    localStorage.setItem('correctedSpeech', data.normal_text);
+                    window.location.href = 'index3.html';
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to process text: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
