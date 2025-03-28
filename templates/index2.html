@@ -11,7 +11,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Floating Shapes -->
     <div class="floating-shapes">
         <span class="shape shape1"></span>
         <span class="shape shape2"></span>
@@ -19,27 +18,23 @@
         <span class="shape shape4"></span>
         <span class="shape shape5"></span>
     </div>
-    <!-- Back Arrow Button -->
+    
     <a href="sel_page.html" class="back-btn">
         <i class="fas fa-arrow-left"></i> 
     </a>
 
     <h5 class="head">Press to record your voice</h5>
 
-    <!-- Mic Button with Circular Gradient Effects -->
     <div class="mic-container">
         <button id="mic-btn" class="mic-btn">
             <i class="fas fa-microphone mic-icon"></i>
         </button>
     </div>
 
-    <!-- Full Width Waveform Canvas -->
     <canvas id="waveform"></canvas>
 
-    <!-- Stuttered Speech Text Box -->
     <textarea id="stuttered-speech" class="speech-box" placeholder="Stuttered speech will appear here..." readonly></textarea>
 
-    <!-- Button to Correct Speech -->
     <button id="clear-speech-btn" class="clear-btn">Get Clear Speech</button>
 
     <script>
@@ -55,7 +50,6 @@
         let dataArray;
         let animationFrame;
 
-        // Adjust canvas size
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = 100;
@@ -99,11 +93,8 @@
         }
 
         function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Completely clears the canvas
-    canvas.style.background = "none"; // Ensures the canvas background stays transparent
-}
-
-
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
 
         function drawWaveform() {
             ctx.lineWidth = 2;
@@ -171,7 +162,7 @@
                 const response = await fetch('http://localhost:5000/process', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: stutteredText })
+                    body: JSON.stringify({ text: stutteredText, lang: 'en' })
                 });
 
                 if (!response.ok) throw new Error('Error processing text');

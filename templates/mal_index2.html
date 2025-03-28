@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 </head>
 <body>
-    <!-- Floating Shapes -->
     <div class="floating-shapes">
         <span class="shape shape1"></span>
         <span class="shape shape2"></span>
@@ -20,29 +18,18 @@
         <span class="shape shape4"></span>
         <span class="shape shape5"></span>
     </div>
-    <!-- Back Arrow Button -->
     <a href="sel_page.html" class="back-btn">
         <i class="fas fa-arrow-left"></i> 
     </a>
-
     <h5 class="head">നിങ്ങളുടെ ശബ്ദം രേഖപ്പെടുത്തുക</h5>
-
-    <!-- Mic Button with Circular Gradient Effects -->
     <div class="mic-container">
         <button id="mic-btn" class="mic-btn">
             <i class="fas fa-microphone mic-icon"></i>
         </button>
     </div>
-
-    <!-- Full Width Waveform Canvas -->
     <canvas id="waveform"></canvas>
-
-    <!-- Stuttered Speech Text Box -->
     <textarea id="stuttered-speech" class="speech-box" placeholder="ഇവിടെ നിങ്ങളുടെ തടസംപരമായ സംസാരത്തെ കാണാനാകും..." readonly></textarea>
-
-    <!-- Button to Correct Speech -->
     <button id="clear-speech-btn" class="clear-btn">സ്പഷ്ടമായ സംസാരണം നേടുക</button>
-
     <script>
         const micBtn = document.getElementById('mic-btn');
         const speechBox = document.getElementById('stuttered-speech');
@@ -56,7 +43,6 @@
         let dataArray;
         let animationFrame;
 
-        // Adjust canvas size
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = 100;
@@ -71,7 +57,6 @@
                 analyser.fftSize = 2048;
                 dataArray = new Uint8Array(analyser.frequencyBinCount);
             }
-
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then((stream) => {
                     microphone = audioContext.createMediaStreamSource(stream);
@@ -80,7 +65,7 @@
                 })
                 .catch((err) => {
                     console.error("Microphone access denied:", err);
-                    alert("Please allow microphone access.");
+                    alert("ദയവായി മൈക്രോഫോൺ ആക്സസ് അനുവദിക്കുക.");
                 });
         }
 
@@ -100,11 +85,9 @@
         }
 
         function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Completely clears the canvas
-    canvas.style.background = "none"; // Ensures the canvas background stays transparent
-}
-
-
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.background = "none";
+        }
 
         function drawWaveform() {
             ctx.lineWidth = 2;
@@ -112,7 +95,6 @@
             ctx.beginPath();
             const sliceWidth = canvas.width / dataArray.length;
             let x = 0;
-
             for (let i = 0; i < dataArray.length; i++) {
                 const v = dataArray[i] / 128.0;
                 const y = v * canvas.height / 2;
@@ -127,7 +109,7 @@
         const recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'en-US';
+        recognition.lang = 'ml-IN';
 
         micBtn.addEventListener('click', () => {
             if (isListening) {
@@ -152,7 +134,7 @@
 
         recognition.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
-            alert('An error occurred: ' + event.error);
+            alert('തകരാറുണ്ടായി: ' + event.error);
         };
 
         recognition.onend = () => {
@@ -164,25 +146,22 @@
         clearSpeechBtn.addEventListener('click', async () => {
             const stutteredText = speechBox.value;
             if (!stutteredText) {
-                alert('Please record some speech before processing.');
+                alert('ദയവായി സംസാരിക്കുക');
                 return;
             }
-
             try {
                 const response = await fetch('http://localhost:5000/process', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: stutteredText })
+                    body: JSON.stringify({ text: stutteredText, lang: 'mal' })
                 });
-
                 if (!response.ok) throw new Error('Error processing text');
-
                 const data = await response.json();
                 if (data.normal_text) {
                     localStorage.setItem('correctedSpeech', data.normal_text);
-                    window.location.href = 'index3.html';
+                    window.location.href = 'mal_index3.html';
                 } else {
-                    alert('Error: ' + (data.error || 'Unknown error'));
+                    alert('തകരാർ: ' + (data.error || 'അപരിചിതമായ പിശക്'));
                 }
             } catch (error) {
                 console.error('Error:', error);

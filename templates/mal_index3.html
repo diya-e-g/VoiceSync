@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 </head>
 <body>
     <!-- Floating Shapes -->
@@ -20,6 +19,7 @@
         <span class="shape shape4"></span>
         <span class="shape shape5"></span>
     </div>
+    
     <!-- Home Button at top right -->
     <a href="./index.html">
         <button class="home-btn">
@@ -37,9 +37,9 @@
     <h5 class="head">ഓരോ വാക്കിനും പ്രഭാവം നൽകൂ, അവയെ ഉജ്ജ്വലമാക്കൂ!!</h5>
 
     <!-- Display the corrected speech in a text box -->
-    <textarea id="corrected-speech" class="speech-box" placeholder="തിരുത്തിയ വാക്കുകൾ ഇവിടെ കാണാം..."></textarea>
+    <textarea id="corrected-speech" class="speech-box" placeholder="തിരുത്തിയ വാക്കുകൾ ഇവിടെ കാണാം..." readonly></textarea>
 
-    <!-- Gradient Divs around Play Button -->
+    <!-- Play Button (No White Popup) -->
     <div class="play-container">
         <div class="play-gradient">
             <button id="play-button" class="play-btn">
@@ -47,6 +47,9 @@
             </button>
         </div>
     </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="hidden-audio" style="display: none;"></audio>
 
     <script>
         // Get the corrected speech from localStorage
@@ -56,25 +59,33 @@
             document.getElementById('corrected-speech').value = correctedText;
         }
 
-        // Text-to-speech functionality
-        document.getElementById('play-button').addEventListener('click', function () {
+        // Play the corrected speech audio
+        document.getElementById('play-button').addEventListener('click', async function () {
             const text = document.getElementById('corrected-speech').value;
-
             if (!text.trim()) {
-                alert("Please enter some text to convert to speech!");
+                alert("ദയവായി ചില വാക്കുകൾ നൽകുക!");
                 return;
             }
-
-            // Initialize SpeechSynthesis API
-            const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(text);
-
-            // Set speech properties
-            utterance.rate = 1; // Speed
-            utterance.volume = 1; // Volume
-            utterance.pitch = 1; // Pitch
-
-            synth.speak(utterance);
+            try {
+                const response = await fetch('http://localhost:5000/generate_audio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, lang: 'mal' })
+                });
+                if (!response.ok) throw new Error('Audio generation failed');
+                
+                const data = await response.json();
+                if (data.audio_url) {
+                    const audioElement = document.getElementById('hidden-audio');
+                    audioElement.src = data.audio_url;
+                    audioElement.play();  // Play audio in background
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate audio: ' + error.message);
+            }
         });
     </script>
 </body>
