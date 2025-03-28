@@ -1,0 +1,80 @@
+/* General Page Styling */
+body {
+    background: linear-gradient(135deg, #001f3f, #005f99); /* Dark blue gradient */
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative; /* Ensures proper positioning */
+}
+
+/* Container for Forms */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+}
+
+/* Input Fields */
+input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Button Styling */
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Sign Up & Login Buttons */
+.container button {
+    background-color: #007acc;
+    color: white;
+}
+
+.container button:hover {
+    background-color: #005f99;
+}
+
+/* Logout Button (Top Right Corner) */
+#logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #d9534f; /* Red color for logout */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+}
+
+#logout-button:hover {
+    background-color: #c9302c;
+}
+
+/* Placeholder Text Color */
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}

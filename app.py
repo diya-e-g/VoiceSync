@@ -4,10 +4,21 @@ import re
 import nltk
 from flask_cors import CORS  
 from gtts import gTTS  
+from dotenv import load_dotenv
 
+load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS
+
+load_dotenv()
+
+@app.route('/config')
+def get_config():
+    return jsonify({
+        "SUPABASE_URL": os.getenv("SUPABASE_URL"),
+        "SUPABASE_KEY": os.getenv("SUPABASE_KEY")
+    })
 
 # Folder to store generated audio
 AUDIO_FOLDER = "static/audio"
@@ -58,9 +69,32 @@ def convert_structured_to_normal_text(text, lang):
     unique_sentences = remove_duplicate_sentences(processed_sentences)
     return " ".join(unique_sentences)
 
+
 @app.route('/')
+def home():
+    return render_template('index1.html')  
+# Show index.html first
+
+@app.route('/signup.html')
+def signup_page():
+    return render_template('signup.html')
+
+@app.route('/login.html')
+def login_page():
+    return render_template('login.html')
+
+
+@app.route('/dashboard.html')
+def dash_page():
+    return render_template('dashboard.html')
+
+
+@app.route('/sel_page.html')
 def select_language():
-    return render_template('sel_page.html')  # Language selection page
+    return render_template('sel_page.html')  # Show selection page when needed
+
+
+
 
 @app.route('/set_language', methods=['POST'])
 def set_language():

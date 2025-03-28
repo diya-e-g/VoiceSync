@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="{{ url_for('static', filename='auth.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <input type="text" id="name" placeholder="Full Name" required autocomplete="name">
+        <input type="text" id="username" placeholder="Username" required autocomplete="username">
+
+        <input type="tel" id="phone" placeholder="Phone Number" required autocomplete="tel">
+        <input type="password" id="password" placeholder="Password" required autocomplete="new-password">
+        <input type="password" id="confirm-password" placeholder="Confirm Password" required autocomplete="new-password">
+        
+        <button onclick="signUp()">Sign Up</button>
+        <p>Already have an account? <a href="login.html">Log In</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <!-- Add Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="{{ url_for('static', filename='auth.js') }}"></script>
+
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <button id="logout-button" onclick="logout()">Log Out</button>
+
+    <div class="container">
+        <h2>Welcome, User!</h2>
+        <p>You are now logged in.</p>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Show logout button when the user is logged in
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutBtn = document.getElementById("logout-button");
+            logoutBtn.style.display = "block";
+        });
+    </script>
+
+</body>
+</html>
