@@ -1,23 +1,37 @@
-fetch("/config")
-  .then(response => response.json())
-  .then(config => {
-      const SUPABASE_URL = config.SUPABASE_URL;
-      const SUPABASE_KEY = config.SUPABASE_KEY;
+if (!window.supabase) {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js";
+    script.onload = initializeSupabase; 
+    document.head.appendChild(script);
+} else {
+    initializeSupabase();
+}
 
-      const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function initializeSupabase() {
+    fetch("/config")
+        .then(response => response.json())
+        .then(config => {
+            if (!config.SUPABASE_URL || !config.SUPABASE_KEY) {
+                throw new Error("Missing Supabase config");
+            }
 
-      console.log("Supabase initialized:", SUPABASE_URL);
-  })
-  .catch(error => console.error("Error fetching config:", error));
+            // Assign Supabase to global window object
+            window.supabase = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY);
+            console.log("Supabase initialized:", config.SUPABASE_URL);
+        })
+        .catch(error => console.error("Error fetching config:", error));
+}
 
-
-const supabaseUrl = "https://cmunvjxgxvkorvzccrec.supabase.co"; 
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtdW52anhneHZrb3J2emNjcmVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4ODQxMDYsImV4cCI6MjA1NzQ2MDEwNn0.nr-HQzF529rqoKu1-y-28zX-iYGp-glcatmMG2xPQog"; // Replace with your Supabase anon key
-
-const supabase =window. supabase.createClient(supabaseUrl, supabaseAnonKey);
+// Function to wait for Supabase initialization
+async function waitForSupabase() {
+    while (!window.supabase) {
+        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for 100ms
+    }
+}
 
 
 async function signUp() {
+    await waitForSupabase();
     
     const username = document.getElementById("username")?.value.trim();
     const name = document.getElementById("name")?.value.trim();
@@ -75,6 +89,7 @@ async function signUp() {
 
 
 async function login() {
+    await waitForSupabase();
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
@@ -94,6 +109,7 @@ async function login() {
 
 
 async function logout() {
+    await waitForSupabase();
     const { error } = await supabase.auth.signOut();
 
     if (error) {
@@ -104,3 +120,6 @@ async function logout() {
         window.location.href = "login.html"; 
     }
 }
+window.signUp=signUp;
+window.login=login;
+window.logout=logout;

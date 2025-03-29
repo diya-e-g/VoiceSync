@@ -85,8 +85,8 @@ def home():
 @app.route('/config')
 def get_config():
     return jsonify({
-        "SUPABASE_URL": SUPABASE_URL,
-        "SUPABASE_KEY": SUPABASE_KEY
+        "SUPABASE_URL":os.getenv("SUPABASE_URL"),
+        "SUPABASE_KEY":os.getenv("SUPABASE_KEY")
     })
 
 @app.route('/signup.html')
