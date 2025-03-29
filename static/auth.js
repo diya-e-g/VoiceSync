@@ -88,7 +88,7 @@ async function login() {
         alert("Error logging in: " + error.message);
     } else {
         alert("Login successful!");
-        window.location.href = "dashboard.html"; 
+        window.location.href = "logout.html"; 
     }
 }
 

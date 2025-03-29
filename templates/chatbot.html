@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Voice Sync</title>
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../static/chatbot.css" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Josefin+Slab:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Floating shapes background -->
+  <div class="floating-shapes">
+    <span class="shape shape1"></span>
+    <span class="shape shape2"></span>
+    <span class="shape shape3"></span>
+  </div>
+
+  <!-- Main Heading -->
+  <h2 class="head">Speech Therapist Chatbot</h2>
+
+  <!-- Chatbot Container -->
+  <div class="chat-container">
+    <main id="chat-box"></main>
+    <footer>
+      <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type a message..." autocomplete="off" />
+        <button type="submit">Send</button>
+        <button type="button" id="record-btn">🎙️</button>
+      </form>
+    </footer>
+  </div>
+
+  <!-- Chatbot script -->
+  <script src="../static/chatbot.js"></script>
+</body>
+</html>

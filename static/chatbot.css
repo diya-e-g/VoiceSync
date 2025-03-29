@@ -1,0 +1,289 @@
+/* RESET & FULL-HEIGHT SETUP */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family:serif;
+}
+
+/* -------------------------------------
+   BACKGROUND: ANIMATED GRADIENT & OVERLAY
+-------------------------------------- */
+body {
+  /* Same animated gradient as original page */
+  background: linear-gradient(
+    270deg,
+    rgb(0, 2, 26),
+    rgb(0, 12, 60),
+    rgb(3, 27, 78),
+    rgb(6, 60, 130),
+    rgb(6, 199, 218)
+  );
+  background-size: 400% 400%;
+
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+/* Subtle white overlay wave */
+body::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 150%;
+  height: 150%;
+  background: #fff;
+  opacity: 0.07;
+  clip-path: ellipse(50% 40% at 50% 50%);
+  animation: pulseShape 10s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pulseShape {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg);
+  }
+}
+
+/* -------------------------------------
+   FLOATING SHAPES
+-------------------------------------- */
+.floating-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.shape {
+  position: absolute;
+  bottom: -150px; /* Start off-screen */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  animation: floatUp 10s linear infinite;
+}
+.shape1 {
+  left: 10%;
+  width: 120px;
+  height: 120px;
+  animation-duration: 12s;
+}
+.shape2 {
+  left: 30%;
+  width: 80px;
+  height: 80px;
+  animation-duration: 9s;
+  animation-delay: 2s;
+}
+.shape3 {
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  animation-duration: 11s;
+  animation-delay: 4s;
+}
+.shape4 {
+  left: 70%;
+  width: 130px;
+  height: 130px;
+  animation-duration: 14s;
+  animation-delay: 1s;
+}
+.shape5 {
+  left: 85%;
+  width: 90px;
+  height: 90px;
+  animation-duration: 10s;
+  animation-delay: 3s;
+}
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* -------------------------------------
+   HEADINGS & SUBHEADINGS
+-------------------------------------- */
+.head {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  z-index: 1; /* Above shapes */
+
+}
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* -------------------------------------
+   CHATBOT CONTAINER
+-------------------------------------- */
+.chat-container {
+  margin: 20px;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* MAIN Chat Box */
+#chat-box {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+/* User message */
+.user-message {
+  align-self: flex-end; /* Push to the right */
+  background-color: #1A2A6C; /* Deep navy blue */
+  color: #ffffff;
+  border-radius: 15px;
+  font-size: 20px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 70%;
+}
+
+/* Bot message */
+.bot-message {
+  align-self: flex-start; /* Push to the left */
+  background-color: #90d1e7; /* Soft teal/sky blue */
+  color: #000000;
+  font-size: 20px;
+  border-radius: 15px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 70%;
+}
+
+
+
+
+/* Fade-in Animation for messages */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* FOOTER & FORM */
+/* FOOTER & FORM */
+footer {
+  width: 100%;
+  margin-top: auto; /* Pushes it to the bottom */
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+#chat-form {
+  display: flex;
+  width: 100%; /* Full width */
+}
+
+#user-input {
+  width: 100%; /* Ensure full width */
+  padding: 12px;
+  background-color: #c5eaf7;
+  border: 1px solid #fbfbfb;
+  border-radius: 25px;
+  font-size: 1rem;
+  flex: 1; /* Allow input to grow and fill available space */
+  outline: none;
+}
+
+/* Buttons */
+#chat-form button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-family: 'Josefin Slab', serif;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px; /* Add gap manually to avoid flex shrink issues */
+}
+
+button[type="submit"] {
+  background:rgb(3, 27, 78);
+  color: #fff;
+}
+
+button[type="submit"]:hover {
+  background: rgb(4, 37, 109);
+}
+
+#record-btn {
+  background: rgb(6, 66, 145);
+  color: #fff;
+}
+
+#record-btn:hover {
+  background: rgb(8, 87, 191);
+}

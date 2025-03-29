@@ -4,25 +4,30 @@ import re
 import nltk
 from flask_cors import CORS  
 from gtts import gTTS  
+import google.generativeai as genai
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
+
 # Initialize Flask app
-app = Flask(__name__)
-CORS(app)  # Enable CORS
+app = Flask(__name__, static_folder="static", template_folder="templates")
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-load_dotenv()
+# Ensure required NLTK resources are available
+nltk.download('punkt')
 
-@app.route('/config')
-def get_config():
-    return jsonify({
-        "SUPABASE_URL": os.getenv("SUPABASE_URL"),
-        "SUPABASE_KEY": os.getenv("SUPABASE_KEY")
-    })
+# Environment variables
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-# Folder to store generated audio
-AUDIO_FOLDER = "static/audio"
-os.makedirs(AUDIO_FOLDER, exist_ok=True)
+if not GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY is missing in the .env file")
+
+# Configure AI model
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel("gemini-1.5-pro")
 
 # Custom correction dictionaries
 custom_corrections = {
@@ -37,6 +42,10 @@ custom_corrections = {
         "മൈ": "എന്റെ", "പേര്": "പേര്", "ആണ്": "ആണ്"
     }
 }
+
+# Folder to store generated audio
+AUDIO_FOLDER = "static/audio"
+os.makedirs(AUDIO_FOLDER, exist_ok=True)
 
 def remove_repeated_characters(word):
     return re.sub(r"(.)\1+", r"\1", word)
@@ -69,11 +78,16 @@ def convert_structured_to_normal_text(text, lang):
     unique_sentences = remove_duplicate_sentences(processed_sentences)
     return " ".join(unique_sentences)
 
-
 @app.route('/')
 def home():
-    return render_template('index1.html')  
-# Show index.html first
+    return render_template('index1.html')
+
+@app.route('/config')
+def get_config():
+    return jsonify({
+        "SUPABASE_URL": SUPABASE_URL,
+        "SUPABASE_KEY": SUPABASE_KEY
+    })
 
 @app.route('/signup.html')
 def signup_page():
@@ -83,25 +97,18 @@ def signup_page():
 def login_page():
     return render_template('login.html')
 
-
-@app.route('/dashboard.html')
-def dash_page():
-    return render_template('dashboard.html')
-
+@app.route('/logout.html')
+def logout_page():
+    return render_template('logout.html')
 
 @app.route('/sel_page.html')
 def select_language():
-    return render_template('sel_page.html')  # Show selection page when needed
-
-
-
+    return render_template('sel_page.html')
 
 @app.route('/set_language', methods=['POST'])
 def set_language():
     lang = request.form.get('language')
-    if lang == 'mal':
-        return redirect(url_for('mal_index2'))
-    return redirect(url_for('eng_index2'))
+    return redirect(url_for('mal_index2' if lang == 'mal' else 'eng_index2'))
 
 @app.route('/eng_index2')
 def eng_index2():
@@ -145,15 +152,11 @@ def generate_audio():
         return jsonify({'error': 'No text provided'}), 400
 
     try:
-        # Generate speech using gTTS
         tts = gTTS(text=text, lang=lang)
         audio_filename = f"{lang}_speech.mp3"
         audio_path = os.path.join(AUDIO_FOLDER, audio_filename)
         tts.save(audio_path)
-
-        # Return the URL to the generated audio
         return jsonify({'audio_url': f"/static/audio/{audio_filename}"})
-
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -161,5 +164,28 @@ def generate_audio():
 def serve_audio(filename):
     return send_from_directory(AUDIO_FOLDER, filename)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/chatbot.html")
+def chatbot_page():
+    return render_template("chatbot.html")
+
+@app.route("/get", methods=["POST"])
+def chatbot_response():
+    try:
+        data = request.get_json()
+        user_message = data.get("msg", "").strip()
+        if not user_message:
+            return jsonify({"response": "⚠️ Please enter a message."}), 400
+        
+        therapist_prompt = (
+            "You are Voice Sync, a speech therapist chatbot helping a patient with their speech. "
+            "Correct their stuttered speech and appreciate them if they speak fluently. "
+            "Get straight to the point in 2-3 sentences."
+        )
+        response = model.generate_content([therapist_prompt, user_message])
+        bot_message = response.text if hasattr(response, "text") else "I couldn't generate a response."
+        return jsonify({"response": bot_message})
+    except Exception as e:
+        return jsonify({"response": f"⚠️ Error processing request: {str(e)}"}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
