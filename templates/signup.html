@@ -6,11 +6,30 @@
     <title>Sign Up</title>
     <link rel="stylesheet" href="../static/signup.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="{{ url_for('static', filename='auth.js') }}"></script>
+    <script src="{ url_for('static', filename='auth.js') }}"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="floating-shapes">
+        <span class="shape shape1"></span>
+        <span class="shape shape2"></span>
+        <span class="shape shape3"></span>
+        <span class="shape shape4"></span>
+        <span class="shape shape5"></span>
+    </div>
+
     <div class="container">
-        <h2>Sign Up</h2>
+        <h2 class="sign-head">Sign Up</h2>
         <input type="text" id="name" placeholder="Full Name" required autocomplete="name">
         <input type="text" id="username" placeholder="Username" required autocomplete="username">
 
@@ -19,7 +38,13 @@
         <input type="password" id="confirm-password" placeholder="Confirm Password" required autocomplete="new-password">
         
         <button onclick="signUp()">Sign Up</button>
-        <p>Already have an account? <a href="login.html">Log In</a></p>
+        <p class="account">Already have an account? <a href="login.html" class="login">Log In</a></p>
+
+        <!-- Back Arrow Button -->
+        <a href="index1.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 
+        </a>
+        
     </div>
 </body>
 </html>

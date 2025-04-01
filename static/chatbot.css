@@ -24,8 +24,6 @@ body {
     rgb(6, 199, 218)
   );
   background-size: 400% 400%;
-
-
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -33,8 +31,6 @@ body {
   position: relative;
   overflow: hidden;
 }
-
-
 
 /* Subtle white overlay wave */
 body::before {
@@ -50,122 +46,32 @@ body::before {
   animation: pulseShape 10s ease-in-out infinite;
   pointer-events: none;
 }
-@keyframes pulseShape {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
+
+/* Animated gradient shift */
+@keyframes gradientShift {
+  0% {
+      background-position: 0% 50%;
   }
   50% {
-    transform: scale(1.1) rotate(2deg);
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
   }
 }
 
-/* -------------------------------------
-   FLOATING SHAPES
--------------------------------------- */
-.floating-shapes {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-}
-.shape {
-  position: absolute;
-  bottom: -150px; /* Start off-screen */
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  animation: floatUp 10s linear infinite;
-}
-.shape1 {
-  left: 10%;
-  width: 120px;
-  height: 120px;
-  animation-duration: 12s;
-}
-.shape2 {
-  left: 30%;
-  width: 80px;
-  height: 80px;
-  animation-duration: 9s;
-  animation-delay: 2s;
-}
-.shape3 {
-  left: 50%;
-  width: 100px;
-  height: 100px;
-  animation-duration: 11s;
-  animation-delay: 4s;
-}
-.shape4 {
-  left: 70%;
-  width: 130px;
-  height: 130px;
-  animation-duration: 14s;
-  animation-delay: 1s;
-}
-.shape5 {
-  left: 85%;
-  width: 90px;
-  height: 90px;
-  animation-duration: 10s;
-  animation-delay: 3s;
-}
-@keyframes floatUp {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.2;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(-120vh) scale(1.2);
-    opacity: 0;
-  }
-}
 
 /* -------------------------------------
    HEADINGS & SUBHEADINGS
 -------------------------------------- */
 .head {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Josefin Slab', serif;
   font-size: 2rem;
   color: #fff;
   text-align: center;
   width: 100%;
   margin-top: 20px;
-  z-index: 1; /* Above shapes */
-
-}
-@keyframes fadeSlideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-
-
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  font-weight:350;
 }
 
 /* -------------------------------------
@@ -197,10 +103,14 @@ body::before {
   background-color: #1A2A6C; /* Deep navy blue */
   color: #ffffff;
   border-radius: 15px;
-  font-size: 20px;
   padding: 12px 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   max-width: 70%;
+  font-family: 'Josefin Slab', serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 5px;
+  line-height: 1.5;
 }
 
 /* Bot message */
@@ -213,25 +123,9 @@ body::before {
   padding: 12px 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 70%;
+  font-family:'Josefin Slab', serif;
 }
 
-
-
-
-/* Fade-in Animation for messages */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* FOOTER & FORM */
 /* FOOTER & FORM */
 footer {
   width: 100%;
@@ -287,3 +181,11 @@ button[type="submit"]:hover {
 #record-btn:hover {
   background: rgb(8, 87, 191);
 }
+
+input::placeholder {
+  font-family: 'Josefin Slab', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5); /* Adjust color for better visibility */
+}
+

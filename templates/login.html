@@ -4,19 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
-    <link rel="stylesheet" href="../static/signup.css">
+    <link rel="stylesheet" href="../static/login.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="{{ url_for('static', filename='auth.js') }}"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="floating-shapes">
+        <span class="shape shape1"></span>
+        <span class="shape shape2"></span>
+        <span class="shape shape3"></span>
+        <span class="shape shape4"></span>
+        <span class="shape shape5"></span>
+    </div>
+
     <div class="container">
-        <h2>Log In</h2>
+        <h2 class="log">Log In</h2>
         <input type="text" id="username" placeholder="Username" required autocomplete="username">
 
         <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
 
         <button onclick="login()">Log In</button>
-        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        <p class="account">Don't have an account? <a href="signup.html" class="sign">Sign Up</a></p>
     </div>
+
+    <!-- Back Arrow Button -->
+    <a href="index1.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> 
+    </a>
 </body>
 </html>

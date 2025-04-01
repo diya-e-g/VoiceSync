@@ -4,17 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication</title>
-    <link rel="stylesheet" href="../static/signup.css">
+    <link rel="stylesheet" href="../static/index1.css">
     <script src="../auth.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Clicker+Script&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Script&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+ZA:wght@100..400&display=swap" rel="stylesheet">
 
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome</h1>
-        <button onclick="location.href='signup.html'">Sign Up</button>
-        <button onclick="location.href='login.html'">Log In</button>
-        <a href="{{ url_for('select_language') }}">Change Language</a>
-
+    <div class="floating-shapes">
+        <span class="shape shape1"></span>
+        <span class="shape shape2"></span>
+        <span class="shape shape3"></span>
+        <span class="shape shape4"></span>
+        <span class="shape shape5"></span>
     </div>
+    <h1 class="head">welcome to </h1>
+    <h1 class="head2">voice sync.</h1>
+    <div class="container">
+        
+        <button onclick="location.href='signup.html'" class="button1">Sign Up</button>
+        <button onclick="location.href='login.html'" class="button2">Log In</button>
+    </div>
+    <div class="shooting-stars"></div>
+
+    <!-- Back Arrow Button -->
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> 
+    </a>
+
+    <script>
+        function createShootingStar() {
+            const star = document.createElement("div");
+            star.classList.add("shooting-star");
+    
+            // Random starting position (left to right)
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight * 0.5;
+    
+            star.style.left = `${startX}px`;
+            star.style.top = `${startY}px`;
+    
+            // Randomize speed and delay
+            star.style.animationDuration = `${1.5 + Math.random() * 2}s`;
+            star.style.animationDelay = `${Math.random() * 3}s`;
+    
+            document.querySelector(".shooting-stars").appendChild(star);
+    
+            // Remove after animation ends
+            setTimeout(() => {
+                star.remove();
+            }, 4000);
+        }
+    
+        function generateMultipleStars() {
+            for (let i = 0; i < 5; i++) {  // Increased number of stars per interval
+                setTimeout(createShootingStar, Math.random() * 1000);
+            }
+        }
+    
+        // Generate stars at shorter intervals for more frequent shooting stars
+        setInterval(generateMultipleStars, 1000);
+    </script>
+    
+        
 </body>
 </html>

@@ -107,19 +107,6 @@ async function login() {
     }
 }
 
-
-async function logout() {
-    await waitForSupabase();
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-        console.error("Logout error:", error.message);
-        alert("Error logging out: " + error.message);
-    } else {
-        alert("Logged out successfully!");
-        window.location.href = "login.html"; 
-    }
-}
 window.signUp=signUp;
 window.login=login;
 window.logout=logout;

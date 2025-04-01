@@ -66,6 +66,7 @@ body::before {
         transform: scale(1.1) rotate(2deg);
     }
 }
+
 /* -------------------------
    FLOATING SHAPES (Moving Designs)
 ------------------------- */
@@ -145,81 +146,174 @@ body::before {
     }
 }
 
-/* Container for Forms */
-.container {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 10px;
+/* -------------------------
+   TEXT & BUTTON ANIMATIONS
+------------------------- */
+
+/* Heading (.head) Styles */
+.head {
+    font-family: "Clicker script", cursive;
+    font-optical-sizing: auto;
+    font-weight:1;
+    font-style: normal;
+    font-size: 150px;
+    color: white;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 300px;
+    margin: 0;
+    transform: translateY(-30px);
+    animation: fadeSlideDown 1.2s ease forwards;
+    animation-delay: 0.2s;
+    z-index: 1; /* above overlays & shapes */
 }
 
-/* Input Fields */
-input {
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
-    width: 80%;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
+.head2{
+    font-family: "Bodoni Moda", serif;
+    font-optical-sizing: auto;
+    font-weight:bold;
+    font-style: normal;
+    font-size: 80px;
     color: white;
+    text-align: center;
+    margin: 0;
+    transform: translateY(-30px);
+    animation: fadeSlideDown 1.2s ease forwards;
+    animation-delay: 0.2s;
+    z-index: 1; /* above overlays & shapes */
+    margin-top:-50px;
 }
 
-/* Button Styling */
-button {
+/* Floating effect to make the heading more lively */
+@keyframes fadeSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.head {
+    animation: floatEffect 4s ease-in-out infinite;
+}
+
+.head2{
+    animation: floatEffect 4s ease-in-out infinite;
+}
+
+
+/* Floating effect for heading */
+@keyframes floatEffect {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Button (.get-started) Styles */
+.button1 {
     font-family: "Josefin Slab", serif;
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
-    width: 80%;
+    font-size: 20px;
+    font-weight: lighter;
+    padding: 15px 30px;
+    margin-top: 30px;
+    background-color: rgb(0, 12, 60);
+    color: white;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    animation: fadeSlideUp 1s ease forwards;
+    animation-delay: 0.8s;
+    z-index: 1;
 }
 
-/* Sign Up & Login Buttons */
-.container button {
-    background-color: #007acc;
+.button2{
+    font-family: "Josefin Slab", serif;
+    font-size: 20px;
+    font-weight: lighter;
+    padding: 15px 30px;
+    margin-top: 30px;
+    background-color: rgb(0, 12, 60);
     color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    animation: fadeSlideUp 1s ease forwards;
+    animation-delay: 0.8s;
+    z-index: 1;
 }
 
-.container button:hover {
-    background-color: #005f99;
+.button1:hover {
+    background-color: rgb(26, 81, 154);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Placeholder Text Color */
-input::placeholder {
-    font-family: "Josefin Slab", serif;
-    color: rgba(255, 255, 255, 0.7);
+.button2:hover {
+    background-color: rgb(26, 81, 154);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-.sign-head
-{
-    font-family: "Josefin Slab", serif;
-    font-size: 30px;
-    font-weight:350;
-    color:rgb(246, 247, 249);
-    
-}
-.account
-{
-    font-family: "Josefin Slab", serif;
-    color: rgba(255, 255, 255, 0.7);
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.login {
-    color: #ffe063; 
-    font-family: "Josefin Slab", serif;
-    text-decoration: none;
+/*css for shooting stars*/
+/* Shooting Stars Container */
+.shooting-stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
 }
 
-.login:hover {
-    color: #fbad38;
-    text-decoration: underline;
+/* Shooting Star */
+.shooting-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    box-shadow: 0 0 8px white;
+    opacity: 0;
+    transform: rotate(-45deg);
+    animation: shoot 3s linear infinite;
 }
+
+/* Shooting animation */
+@keyframes shoot {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(400px, -300px) scale(0.5);
+    }
+}
+
 /* Back Button */
 .back-btn {
     position: absolute;
@@ -237,3 +331,4 @@ input::placeholder {
     background: #004080;
     transform: scale(1.05);
 }
+
