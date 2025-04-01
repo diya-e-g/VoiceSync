@@ -103,7 +103,7 @@ async function login() {
         alert("Error logging in: " + error.message);
     } else {
         alert("Login successful!");
-        window.location.href = "logout.html"; 
+        window.location.href = "sel_page.html"; 
     }
 }
 
