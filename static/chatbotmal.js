@@ -19,7 +19,7 @@ const appendMessage = (text, type) => {
 const speak = (text) => {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
+    utterance.lang = "ml-IN";  // Set to Malayalam
     utterance.rate = 1;
     utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
@@ -36,7 +36,7 @@ chatForm.addEventListener('submit', async (e) => {
   userInput.value = '';
 
   try {
-    const res = await fetch('http://127.0.0.1:5000/get', {
+    const res = await fetch('http://127.0.0.1:5000/getmal', {
       method: 'POST',
       body: JSON.stringify({ msg: message }),
       headers: { 'Content-Type': 'application/json' }
@@ -60,13 +60,13 @@ recordBtn.addEventListener('click', () => {
 
   if (!isRecording) {
     recognition = new webkitSpeechRecognition();
-    recognition.lang = "en-US";
+    recognition.lang = "ml-IN";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
     recognition.start();
     recordBtn.classList.add('recording');
-    recordBtn.textContent = '🔴 Recording...';
+    recordBtn.textContent = '🔴 റെക്കോർഡിംഗ്...';
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;

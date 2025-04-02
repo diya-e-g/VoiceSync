@@ -159,7 +159,7 @@
                 const data = await response.json();
                 if (data.normal_text) {
                     localStorage.setItem('correctedSpeech', data.normal_text);
-                    window.location.href = 'mal_index3.html';
+                    window.location.href = '/mal_index3';
                 } else {
                     alert('തകരാർ: ' + (data.error || 'അപരിചിതമായ പിശക്'));
                 }

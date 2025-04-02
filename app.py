@@ -77,6 +77,7 @@ def convert_structured_to_normal_text(text, lang):
     processed_sentences = [process_sentence(sentence, lang) for sentence in sentences]
     unique_sentences = remove_duplicate_sentences(processed_sentences)
     return " ".join(unique_sentences)
+    
 
 @app.route('/')
 def home():
@@ -88,6 +89,15 @@ def get_config():
         "SUPABASE_URL":os.getenv("SUPABASE_URL"),
         "SUPABASE_KEY":os.getenv("SUPABASE_KEY")
     })
+
+
+@app.route('/index.html')
+def index_page():
+    return render_template('index.html')
+
+@app.route('/index1.html')
+def index1_page():
+    return render_template('index1.html')
 
 @app.route('/signup.html')
 def signup_page():
@@ -110,17 +120,26 @@ def set_language():
     lang = request.form.get('language')
     return redirect(url_for('mal_index2' if lang == 'mal' else 'eng_index2'))
 
-@app.route('/eng_index2')
+@app.route('/index2.html')
 def eng_index2():
     return render_template('index2.html')
 
-@app.route('/mal_index2')
+@app.route('/index3.html')
+def eng_index3():
+    return render_template('index3.html')
+
+@app.route('/mal_index2.html')
 def mal_index2():
     return render_template('mal_index2.html')
 
 @app.route('/mal_index3')
 def mal_index3():
     return render_template('mal_index3.html')
+
+@app.route('/chatbotmal.html')
+def chatbot_mal_html():
+    return render_template('chatbotmal.html')
+
 
 @app.route('/process', methods=['POST'])
 def process_text():
@@ -177,15 +196,33 @@ def chatbot_response():
             return jsonify({"response": "⚠️ Please enter a message."}), 400
         
         therapist_prompt = (
-            "You are Voice Sync, a speech therapist chatbot helping a patient with their speech. "
-            "Correct their stuttered speech and appreciate them if they speak fluently. "
-            "Get straight to the point in 2-3 sentences."
+            "You are Voice Sync, a speech therapist chatbot helping a patient with their speech. Correct their stuttered speech and appreciate them if they speak fluently. Get straight to the point in 2-3 sentences."
         )
         response = model.generate_content([therapist_prompt, user_message])
         bot_message = response.text if hasattr(response, "text") else "I couldn't generate a response."
         return jsonify({"response": bot_message})
     except Exception as e:
         return jsonify({"response": f"⚠️ Error processing request: {str(e)}"}), 500
+
+
+@app.route("/getmal", methods=["POST"])
+def chatbot_response2():
+    try:
+        data = request.get_json()
+        user_message = data.get("msg", "").strip()
+        if not user_message:
+            return jsonify({"response": "⚠️ Please enter a message."}), 400
+        
+        therapist_prompt = (
+            "Strictly speak in Malayalam. You are Voice Sync, a speech therapist chatbot helping a patient with their speech. Correct their stuttered speech and appreciate them if they speak fluently. Get straight to the point in 2-3 sentences.If the user speaks in Malayalam, respond in malayalam. Otherwise respond in English"
+        )
+        response = model.generate_content([therapist_prompt, user_message])
+        bot_message = response.text if hasattr(response, "text") else "I couldn't generate a response."
+        return jsonify({"response": bot_message})
+    except Exception as e:
+        return jsonify({"response": f"⚠️ Error processing request: {str(e)}"}), 500
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

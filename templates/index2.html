@@ -170,7 +170,7 @@
                 const data = await response.json();
                 if (data.normal_text) {
                     localStorage.setItem('correctedSpeech', data.normal_text);
-                    window.location.href = 'index3.html';
+                    window.location.href = '/index3.html';
                 } else {
                     alert('Error: ' + (data.error || 'Unknown error'));
                 }
