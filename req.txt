@@ -1,7 +1,7 @@
 Flask==2.3.2
 Flask-Cors==3.0.10
 gTTS==2.3.2
-google-generativeai==0.1.0
+google-generativeai==0.3.0
 nltk==3.8.1
 python-dotenv==1.0.0
-gunicorn
+waitress==2.1.2
