@@ -47,12 +47,15 @@ custom_corrections = {
 AUDIO_FOLDER = "static/audio"
 os.makedirs(AUDIO_FOLDER, exist_ok=True)
 
+def remove_special_characters(text):
+    return re.sub(r"[^a-zA-Z0-9\sഀ-ൿ]", "", text)  # Removes special characters but keeps Malayalam characters
+
 def remove_repeated_characters(word):
     return re.sub(r"(.)\1+", r"\1", word)
 
-def normalize_word(word, lang):
+def normalize_word(word, lang="en"):
     word = word.lower()
-    return custom_corrections[lang].get(word, word)
+    return custom_corrections.get(lang, {}).get(word, word)
 
 def remove_duplicate_words(sentence):
     words = sentence.split()
@@ -60,7 +63,7 @@ def remove_duplicate_words(sentence):
     unique_words = [word for word in words if not (word in seen or seen.add(word))]
     return " ".join(unique_words)
 
-def process_sentence(sentence, lang):
+def process_sentence(sentence, lang="en"):
     words = sentence.split()
     processed_words = [normalize_word(remove_repeated_characters(word), lang) for word in words]
     return remove_duplicate_words(" ".join(processed_words))
@@ -70,13 +73,16 @@ def remove_duplicate_sentences(sentences):
     unique_sentences = [sentence for sentence in sentences if not (sentence.lower() in seen or seen.add(sentence.lower()))]
     return unique_sentences
 
-def convert_structured_to_normal_text(text, lang):
-    cleaned_text = re.sub(r"[\-\*\•\d]+\s", "", text)
-    cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
-    sentences = nltk.sent_tokenize(cleaned_text)
-    processed_sentences = [process_sentence(sentence, lang) for sentence in sentences]
-    unique_sentences = remove_duplicate_sentences(processed_sentences)
+def convert_structured_to_normal_text(text, lang="en"):
+    text = text.lower()
+    text = remove_special_characters(text)
+    cleaned_text = re.sub(r"[\-\*\•\d]+\s", "", text)  # Remove bullet points, numbers, etc.
+    cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()  # Remove extra spaces
+    sentences = nltk.sent_tokenize(cleaned_text)  # Tokenize text into sentences
+    processed_sentences = [process_sentence(sentence, lang) for sentence in sentences]  # Process each sentence
+    unique_sentences = remove_duplicate_sentences(processed_sentences)  # Remove duplicate sentences
     return " ".join(unique_sentences)
+
     
 
 @app.route('/')
