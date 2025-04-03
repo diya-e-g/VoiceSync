@@ -87,7 +87,7 @@ def convert_structured_to_normal_text(text, lang="en"):
 
 @app.route('/')
 def home():
-    return render_template('index1.html')
+    return render_template('index.html')
 
 @app.route('/config')
 def get_config():
