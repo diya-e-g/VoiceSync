@@ -132,7 +132,7 @@ def eng_index3():
 def mal_index2():
     return render_template('mal_index2.html')
 
-@app.route('/mal_index3')
+@app.route('/mal_index3.html')
 def mal_index3():
     return render_template('mal_index3.html')
 
