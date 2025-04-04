@@ -28,7 +28,7 @@ Voicesync is a real-time stuttering detection and resolution system designed to 
 
 1. Clone the repository
 ```bash
-git clone https://github.com/diya_e_g/VoiceSync.git
+git clone https://github.com/diya-e-g/VoiceSync.git
 cd VoiceSync
 ```
 
@@ -90,4 +90,4 @@ VoiceSync/
 - [Aswini P](https://github.com/aswini1212)
 - [Adhina Anup](https://github.com/adhinaanup)
 - [Lamiya Yasmin A S](https://github.com/LAMIYA16)
-- [Diya Elsa George](https://github.com/diya_e_g)
+- [Diya Elsa George](https://github.com/diya-e-g)
