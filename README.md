@@ -78,7 +78,7 @@ VoiceSync uses Google's Gemini Pro model to power an AI speech therapist that:
 ```
 VoiceSync/
 │
-├── static/            # Static assets (CSS, JS, images)
+├── static/            # Static assets (CSS, JS)
 ├── templates/         # HTML templates
 ├── app.py             # Flask application
 ├── requirements.txt   # Python dependencies
@@ -91,11 +91,3 @@ VoiceSync/
 - [Adhina Anup](https://github.com/adhinaanup)
 - [Lamiya Yasmin A S](https://github.com/LAMIYA16)
 - [Diya Elsa George](https://github.com/diya_e_g)
-
-## 🙏 Acknowledgements
-
-- [Google Generative AI](https://ai.google.dev/)
-- [Flask](https://flask.palletsprojects.com/)
-- [Supabase](https://supabase.com/)
-- [NLTK](https://www.nltk.org/)
-
