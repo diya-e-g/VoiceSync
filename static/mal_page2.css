@@ -243,7 +243,7 @@ body {
 .clear-btn {
     margin-top: 15px;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 22px;
     font-family: "Josefin Slab", serif;
     color: white;
     background: #002060; /* Dark Blue */
@@ -314,6 +314,36 @@ body {
     10% { opacity: 0.2; }
     50% { opacity: 0.4; }
     100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+
+/* Chatbot Button */
+#chatbot-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    font-family: "Josefin Slab", serif;
+    color: white;
+    background: #002060;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for Chatbot button */
+#chatbot-btn:hover {
+    background: #004080;
+    transform: scale(1.05);
+}
+
+/* Active effect for Chatbot button */
+#chatbot-btn:active {
+    background: #6cc7da;
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 
