@@ -35,6 +35,11 @@
     </a>
 
     <script>
+        const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+        const BASE_URL = isLocalhost 
+        ? "http://localhost:5000"
+        : "https://voicesync-dyp0.onrender.com";
+
         const micBtn = document.getElementById('mic-btn');
         const speechBox = document.getElementById('stuttered-speech');
         const clearSpeechBtn = document.getElementById('clear-speech-btn');
@@ -154,7 +159,7 @@
                 return;
             }
             try {
-                const response = await fetch('http://localhost:5000/process', {
+                const response = await fetch('${BASE_URL}/process', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: stutteredText, lang: 'mal' })
