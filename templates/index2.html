@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,11 @@
     <link rel="stylesheet" href="../static/page2.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="floating-shapes">
         <span class="shape shape1"></span>
@@ -18,9 +21,9 @@
         <span class="shape shape4"></span>
         <span class="shape shape5"></span>
     </div>
-    
+
     <a href="sel_page.html" class="back-btn">
-        <i class="fas fa-arrow-left"></i> 
+        <i class="fas fa-arrow-left"></i>
     </a>
 
     <h5 class="head">Press to record your voice</h5>
@@ -33,20 +36,29 @@
 
     <canvas id="waveform"></canvas>
 
-    <textarea id="stuttered-speech" class="speech-box" placeholder="Stuttered speech will appear here..." readonly></textarea>
+    <textarea id="stuttered-speech" class="speech-box" placeholder="Stuttered speech will appear here..."
+        readonly></textarea>
 
     <button id="clear-speech-btn" class="clear-btn">Get Clear Speech</button>
 
-    <a href="./chatbot.html">
-        <button id="chatbot-btn">Chatbot</button>
-    </a>
-   
+    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+        <a href="/chatbot.html">
+            <button id="chatbot-btn" class="nav-btn">Chatbot</button>
+        </a>
+        <a href="/practice_mode.html">
+            <button id="practice-btn" class="nav-btn">Practice Mode</button>
+        </a>
+        <a href="/dashboard.html">
+            <button id="dashboard-btn" class="nav-btn">My Progress</button>
+        </a>
+    </div>
+
 
     <script>
         const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-        const BASE_URL = isLocalhost 
-        ? "http://localhost:5000"
-        : "https://voicesync-dyp0.onrender.com";
+        const BASE_URL = isLocalhost
+            ? "http://localhost:5000"
+            : "https://voicesync-dyp0.onrender.com";
 
         const micBtn = document.getElementById('mic-btn');
         const speechBox = document.getElementById('stuttered-speech');
@@ -179,6 +191,9 @@
 
                 const data = await response.json();
                 if (data.normal_text) {
+                    if (data.stats) {
+                        updateStats(data.stats);
+                    }
                     localStorage.setItem('correctedSpeech', data.normal_text);
                     window.location.href = 'index3.html';
                 } else {
@@ -190,7 +205,16 @@
             }
         });
 
-       
+        const updateStats = (newStats) => {
+            if (!newStats) return;
+            const currentStats = JSON.parse(localStorage.getItem('dysfluencyStats')) || { blocks: 0, repetitions: 0 };
+            currentStats.blocks += (newStats.blocks || 0);
+            currentStats.repetitions += (newStats.repetitions || 0);
+            localStorage.setItem('dysfluencyStats', JSON.stringify(currentStats));
+        };
+
+
     </script>
 </body>
+
 </html>

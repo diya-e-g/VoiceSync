@@ -1,0 +1,133 @@
+/* Dashboard New Look */
+body {
+    font-family: 'Josefin Slab', serif;
+    /* Background is inherited from global or page2.css usually, but ensuring it's centered */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.glass-dashboard {
+    width: 90%;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.stats-overview {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    transition: transform 0.3s ease, background 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.stat-icon {
+    font-size: 40px;
+    color: #6cc7da;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.stat-title {
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+.stat-value {
+    font-size: 40px;
+    font-weight: bold;
+    font-family: "Bodoni Moda", serif;
+}
+
+.charts-container {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-title {
+    margin-bottom: 15px;
+    font-weight: 300;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.reset-btn {
+    padding: 12px 30px;
+    background: linear-gradient(90deg, #ff6b6b, #ee5253);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-family: inherit;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(238, 82, 83, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.reset-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(238, 82, 83, 0.6);
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: white;
+    text-decoration: none;
+    z-index: 20;
+    transition: transform 0.2s;
+}
+
+.back-btn:hover {
+    transform: scale(1.1);
+}

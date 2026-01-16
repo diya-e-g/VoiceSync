@@ -4,7 +4,8 @@ import re
 import nltk
 from flask_cors import CORS  
 from gtts import gTTS  
-import google.generativeai as genai
+from google import genai 
+from google.genai import types
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -16,17 +17,17 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Download required NLTK tokenizer data
 nltk.download('punkt')
+nltk.download('punkt_tab')
 
 # Retrieve API keys and configuration values from environment variables
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=GEMINI_API_KEY,http_options=types.HttpOptions(api_version='v1'))
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is missing in the .env file")
 
-# Configure the generative AI model
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-pro")
+
 
 # Define custom correction mappings for English and Malayalam
 custom_corrections = {
@@ -52,44 +53,71 @@ os.makedirs(AUDIO_FOLDER, exist_ok=True)
 def remove_special_characters(text):
     return re.sub(r"[^a-zA-Z0-9\sഀ-ൿ]", "", text)
 
-# Replace repeated characters in a word with a single occurrence.
-def remove_repeated_characters(word):
-    return re.sub(r"(.)\1+", r"\1", word)
+# Process a word: remove repeated characters and count changes (blocks).
+def process_word_with_stats(word):
+    new_word, count = re.subn(r"(.)\1+", r"\1", word)
+    return new_word, count
 
-# Normalize a word to lowercase and apply custom corrections for the specified language.
-def normalize_word(word, lang="en"):
-    word = word.lower()
-    return custom_corrections.get(lang, {}).get(word, word)
-
-# Remove duplicate words from a sentence while preserving the original order.
-def remove_duplicate_words(sentence):
+# Process a sentence: normalize, remove repeated characters, eliminate duplicate words, and return stats.
+def process_sentence_with_stats(sentence, lang="en"):
     words = sentence.split()
+    
+    # 1. Blocks (repeated characters)
+    processed_words_step1 = []
+    blocks_count = 0
+    for word in words:
+        nw, c = process_word_with_stats(word)
+        blocks_count += c
+        processed_words_step1.append(normalize_word(nw, lang))
+        
+    # 2. Repetitions (duplicate words)
     seen = set()
-    unique_words = [word for word in words if not (word in seen or seen.add(word))]
-    return " ".join(unique_words)
+    unique_words = []
+    repetitions_count = 0
+    for w in processed_words_step1:
+        if w in seen:
+            repetitions_count += 1
+        else:
+            seen.add(w)
+            unique_words.append(w)
+            
+    final_sentence = " ".join(unique_words)
+    return final_sentence, blocks_count, repetitions_count
 
-# Process a sentence: normalize, remove repeated characters, and eliminate duplicate words.
-def process_sentence(sentence, lang="en"):
-    words = sentence.split()
-    processed_words = [normalize_word(remove_repeated_characters(word), lang) for word in words]
-    return remove_duplicate_words(" ".join(processed_words))
-
-# Remove duplicate sentences, case-insensitively.
-def remove_duplicate_sentences(sentences):
-    seen = set()
-    unique_sentences = [sentence for sentence in sentences if not (sentence.lower() in seen or seen.add(sentence.lower()))]
-    return unique_sentences
-
-# Convert structured text into normal text by cleaning, tokenizing, processing, and removing duplicate sentences.
-def convert_structured_to_normal_text(text, lang="en"):
+# Convert structured text into normal text with analytics.
+def convert_structured_to_normal_text_with_stats(text, lang="en"):
     text = text.lower()
     text = remove_special_characters(text)
     cleaned_text = re.sub(r"[\-\*\•\d]+\s", "", text)
     cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
     sentences = nltk.sent_tokenize(cleaned_text)
-    processed_sentences = [process_sentence(sentence, lang) for sentence in sentences]
-    unique_sentences = remove_duplicate_sentences(processed_sentences)
-    return " ".join(unique_sentences)
+    
+    total_blocks = 0
+    total_repetitions = 0
+    processed_sentences_list = []
+    
+    for sentence in sentences:
+        s_text, b_count, r_count = process_sentence_with_stats(sentence, lang)
+        total_blocks += b_count
+        total_repetitions += r_count
+        processed_sentences_list.append(s_text)
+        
+    unique_sentences = remove_duplicate_sentences(processed_sentences_list)
+    return " ".join(unique_sentences), {"blocks": total_blocks, "repetitions": total_repetitions}
+
+def normalize_word(word, lang="en"):
+    """Corrects common typos based on the custom_corrections dictionary."""
+    return custom_corrections.get(lang, {}).get(word, word)
+
+def remove_duplicate_sentences(sentences):
+    """Removes identical consecutive sentences."""
+    if not sentences:
+        return []
+    result = [sentences[0]]
+    for i in range(1, len(sentences)):
+        if sentences[i] != sentences[i-1]:
+            result.append(sentences[i])
+    return result
 
 # --- Route Handlers ---
 
@@ -172,6 +200,17 @@ def chatbot_mal_html():
 def faq():
     return render_template('faq.html')
 
+#Render MyProgress page
+@app.route('/dashboard.html')
+def dashboard_page():
+    return render_template('dashboard.html')
+
+#Render PracticeMode page
+@app.route('/practice_mode.html')
+def practice_mode():
+    return render_template('practice_mode.html')
+
+
 # Process the input structured text and return normalized text.
 @app.route('/process', methods=['POST'])
 def process_text():
@@ -185,8 +224,8 @@ def process_text():
         return jsonify({'error': 'Unsupported language'}), 400
 
     try:
-        normal_text = convert_structured_to_normal_text(structured_text, lang)
-        return jsonify({'normal_text': normal_text})
+        normal_text, stats = convert_structured_to_normal_text_with_stats(structured_text, lang)
+        return jsonify({'normal_text': normal_text, 'stats': stats})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -227,19 +266,100 @@ def chatbot_response():
     try:
         data = request.get_json()
         user_message = data.get("msg", "").strip()
-        if not user_message:
-            return jsonify({"response": "⚠️ Please enter a message."}), 400
+        scenario = data.get("scenario", "general").lower()
+        resume_text = data.get("resume_text", "")
+        
+        print(f"DEBUG: Received message: {user_message}")
+        print(f"DEBUG: Scenario: {scenario}")
 
-        therapist_prompt = (
-            "You are Voice Sync, a speech therapist chatbot helping a patient with their speech. "
+        # Process stats
+        _, stats = convert_structured_to_normal_text_with_stats(user_message, "en")
+        print(f"DEBUG: Stats calculated: {stats}")
+
+        base_prompt = (
+            "You are Voice Sync, a speech therapist chatbot. "
             "Correct their stuttered speech and appreciate them if they speak fluently. "
-            "Get straight to the point in 2-3 sentences."
+            "Keep response to 2 sentences."
         )
-        response = model.generate_content([therapist_prompt, user_message])
-        bot_message = response.text if hasattr(response, "text") else "I couldn't generate a response."
-        return jsonify({"response": bot_message})
+
+        # Customize prompt based on scenario
+        if scenario == "job_interview":
+            base_prompt = (
+                "You are an experienced and professional hiring manager conducting a job interview. "
+                "Your goal is to assess the candidate's fit for the role while maintaining a professional yet encouraging tone. "
+                "Ask one clear, relevant question at a time. "
+                "If the user provides a short or incomplete answer, ask a follow-up question to dig deeper. "
+                "If they answer well, acknowledge it briefly and move to the next topic. "
+                "Keep your responses natural and spoken-style, not robotic. Limit to 2-3 sentences."
+            )
+            if resume_text:
+                base_prompt += f"\n\nContext from Candidate's Resume:\n{resume_text}\n"
+                base_prompt += "Tailor your questions specifically to the experience, skills, and projects listed in the resume."
+            
+        elif scenario == "ordering_coffee":
+            base_prompt = (
+                "You are a friendly and energetic barista at a popular coffee shop. "
+                "Your goal is to take the customer's order efficiently while being warm and welcoming. "
+                "Ask clarifying questions if the order is vague (e.g., 'What size would you like?', 'Hot or iced?', 'Any milk preference?'). "
+                "React naturally to what they say. Use casual language appropriate for a cafe setting. "
+                "Keep your responses short and conversational (1-2 sentences)."
+            )
+            
+        elif scenario == "public_speaking":
+            base_prompt = (
+                "You are a supportive Public Speaking Coach and an active audience member. "
+                "Your goal is to help the user practice their speech delivery and content. "
+                "After the user speaks, provide a specific piece of positive feedback and one gentle suggestion for improvement if needed. "
+                "Then, ask a relevant follow-up question to help them expand on their topic or practice impromptu speaking. "
+                "Keep your tone encouraging and motivating. Limit response to 2-3 sentences."
+            )
+
+        print("DEBUG: Calling New Gemini API...")
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"{base_prompt} \n\nUser: {user_message}\nAI:"
+        )
+        
+        bot_message = response.text
+        print("DEBUG: Response Successful")
+
+        return jsonify({
+            "response": bot_message, 
+            "stats": stats
+        })
     except Exception as e:
-        return jsonify({"response": f"⚠️ Error processing request: {str(e)}"}), 500
+        print(f"ERROR: {e}")
+        return jsonify({"response": f"⚠️ Connection Error: {str(e)}"}), 500
+
+@app.route('/upload_resume', methods=['POST'])
+def upload_resume():
+    try:
+        if 'resume' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+        
+        file = request.files['resume']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+
+        text = ""
+        if file.filename.endswith('.pdf'):
+            try:
+                from pypdf import PdfReader
+                reader = PdfReader(file)
+                for page in reader.pages:
+                    text += page.extract_text() + "\n"
+            except ImportError:
+                return jsonify({'error': 'pypdf not installed'}), 500
+            except Exception as e:
+                return jsonify({'error': f'Error reading PDF: {str(e)}'}), 500
+        else:
+            # Assume text file
+            text = file.read().decode('utf-8', errors='ignore')
+
+        return jsonify({'text': text})
+    except Exception as e:
+        print(f"Upload Error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 # Generate chatbot response for Malayalam speech therapy.
 @app.route("/getmal", methods=["POST"])
@@ -253,10 +373,17 @@ def chatbot_response2():
         therapist_prompt = (
             "Strictly speak in Malayalam. You are Voice Sync, a speech therapist chatbot helping a patient with their speech. "
             "Correct their stuttered speech and appreciate them if they speak fluently. "
+            "Be more supportive and always encourage the person speaking."
             "Get straight to the point in 2-3 sentences. If the user speaks in Malayalam, respond in Malayalam. Otherwise respond in English."
         )
-        response = model.generate_content([therapist_prompt, user_message])
-        bot_message = response.text if hasattr(response, "text") else "I couldn't generate a response."
+        # Using the client object correctly for Malayalam as well if needed, but keeping original structure if it works or updating it.
+        # Original code used `model.generate_content` but `model` isn't defined in the snippet I saw unless I missed it.
+        # I'll update it to use `client` to be safe, assuming `client` is the global genai client.
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"{therapist_prompt} User message: {user_message}"
+        )
+        bot_message = response.text
         return jsonify({"response": bot_message})
     except Exception as e:
         return jsonify({"response": f"⚠️ Error processing request: {str(e)}"}), 500

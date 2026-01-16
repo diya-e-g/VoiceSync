@@ -17,14 +17,25 @@ const appendMessage = (text, type) => {
   if (type === 'bot') speak(text);
 };
 
-// Use speech synthesis to speak the given text in Malayalam
-const speak = (text) => {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ml-IN"; // Set language to Malayalam
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    window.speechSynthesis.speak(utterance);
+// Use backend gTTS to speak the given text in Malayalam
+const speak = async (text) => {
+  try {
+    const response = await fetch('/generate_audio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, lang: 'mal' })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      // Append current time to prevent caching
+      const audio = new Audio(data.audio_url + "?t=" + new Date().getTime());
+      audio.play();
+    } else {
+      console.error("TTS Error:", await response.text());
+    }
+  } catch (error) {
+    console.error("TTS Fetch Error:", error);
   }
 };
 

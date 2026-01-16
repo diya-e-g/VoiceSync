@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -6,14 +7,12 @@ html, body {
 
 /* Animated Gradient Background */
 body {
-    background: linear-gradient(
-        270deg,
-        rgb(0, 2, 26),
-        rgb(0, 12, 60),
-        rgb(3, 27, 78),
-        rgb(6, 60, 130),
-        rgb(6, 199, 218)
-    );
+    background: linear-gradient(270deg,
+            rgb(0, 2, 26),
+            rgb(0, 12, 60),
+            rgb(3, 27, 78),
+            rgb(6, 60, 130),
+            rgb(6, 199, 218));
     background-size: 400% 400%;
     animation: gradientShift 8s ease infinite;
 
@@ -30,9 +29,11 @@ body {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -44,7 +45,7 @@ body {
     font-optical-sizing: auto;
     font-weight: lighter;
     font-style: normal;
-    font-size: 30px;
+    font-size: 40px;
     color: white;
     margin-bottom: 20px;
 }
@@ -205,12 +206,10 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-#chatbot-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+/* Navigation Button Style */
+.nav-btn {
     padding: 15px 30px;
-    font-size: 21px !important; 
+    font-size: 21px !important;
     font-family: "Josefin Slab", serif;
     color: white;
     background: #002060;
@@ -221,12 +220,12 @@ body {
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
-#chatbot-btn:hover {
+.nav-btn:hover {
     background: #004080;
     transform: scale(1.05);
 }
 
-#chatbot-btn:active {
+.nav-btn:active {
     background: #6cc7da;
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -284,8 +283,15 @@ body {
 }
 
 @keyframes pulseShape {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(2deg); }
+
+    0%,
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(2deg);
+    }
 }
 
 /* Floating Shapes */
@@ -303,51 +309,69 @@ body {
 .shape {
     position: fixed;
     bottom: -150px;
-    background: rgba(255, 255, 255, 0.15);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     animation: floatUp 10s linear infinite;
+    backdrop-filter: blur(5px);
+    /* Glossy blur effect */
 }
 
-.shape1 { left: 10%; width: 120px; height: 120px; animation-duration: 12s; }
-.shape2 { left: 30%; width: 80px; height: 80px; animation-duration: 9s; animation-delay: 2s; }
-.shape3 { left: 50%; width: 100px; height: 100px; animation-duration: 11s; animation-delay: 4s; }
-.shape4 { left: 70%; width: 130px; height: 130px; animation-duration: 14s; animation-delay: 1s; }
-.shape5 { left: 85%; width: 90px; height: 90px; animation-duration: 10s; animation-delay: 3s; }
+.shape1 {
+    left: 10%;
+    width: 120px;
+    height: 120px;
+    animation-duration: 12s;
+}
+
+.shape2 {
+    left: 30%;
+    width: 80px;
+    height: 80px;
+    animation-duration: 9s;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    animation-duration: 11s;
+    animation-delay: 4s;
+}
+
+.shape4 {
+    left: 70%;
+    width: 130px;
+    height: 130px;
+    animation-duration: 14s;
+    animation-delay: 1s;
+}
+
+.shape5 {
+    left: 85%;
+    width: 90px;
+    height: 90px;
+    animation-duration: 10s;
+    animation-delay: 3s;
+}
 
 @keyframes floatUp {
-    0% { transform: translateY(0) scale(1); opacity: 0; }
-    10% { opacity: 0.2; }
-    50% { opacity: 0.4; }
-    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-}
+    0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 0;
+    }
 
+    10% {
+        opacity: 0.6;
+    }
 
-/* Chatbot Button */
-#chatbot-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: "Josefin Slab", serif;
-    color: white;
-    background: #002060;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease, transform 0.2s ease;
-}
+    50% {
+        opacity: 0.8;
+    }
 
-/* Hover effect for Chatbot button */
-#chatbot-btn:hover {
-    background: #004080;
-    transform: scale(1.05);
-}
-
-/* Active effect for Chatbot button */
-#chatbot-btn:active {
-    background: #6cc7da;
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    100% {
+        transform: translateY(-120vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+    }
 }

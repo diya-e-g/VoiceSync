@@ -1,5 +1,6 @@
 /* Reset & Full-Height Setup */
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -10,14 +11,12 @@ html, body {
 ------------------------- */
 body {
     /* Animated Gradient Background */
-    background: linear-gradient(
-        270deg,
-        rgb(0, 2, 26),
-        rgb(0, 12, 60),
-        rgb(3, 27, 78),
-        rgb(6, 60, 130),
-        rgb(6, 199, 218)
-    );
+    background: linear-gradient(270deg,
+            rgb(0, 2, 26),
+            rgb(0, 12, 60),
+            rgb(3, 27, 78),
+            rgb(6, 60, 130),
+            rgb(6, 199, 218));
     background-size: 400% 400%;
     animation: gradientShift 8s ease infinite;
 
@@ -25,7 +24,8 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    position: relative; /* for absolute positioning of overlay & shapes */
+    position: relative;
+    /* for absolute positioning of overlay & shapes */
     overflow: hidden;
 }
 
@@ -34,9 +34,11 @@ body {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -51,7 +53,8 @@ body::before {
     width: 150%;
     height: 150%;
     background: white;
-    opacity: 0.07; /* Adjust for subtlety */
+    opacity: 0.07;
+    /* Adjust for subtlety */
     /* Use a wave-like shape or ellipse; here is an example with clip-path */
     clip-path: ellipse(50% 40% at 50% 50%);
     animation: pulseShape 10s ease-in-out infinite;
@@ -59,13 +62,17 @@ body::before {
 }
 
 @keyframes pulseShape {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1) rotate(0deg);
     }
+
     50% {
         transform: scale(1.1) rotate(2deg);
     }
 }
+
 /* -------------------------
    FLOATING SHAPES (Moving Designs)
 ------------------------- */
@@ -77,12 +84,14 @@ body::before {
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    z-index: 0; /* behind main content */
+    z-index: 0;
+    /* behind main content */
 }
 
 .shape {
     position: absolute;
-    bottom: -150px; /* start off-screen */
+    bottom: -150px;
+    /* start off-screen */
     background: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     animation: floatUp 10s linear infinite;
@@ -133,12 +142,15 @@ body::before {
         transform: translateY(0) scale(1);
         opacity: 0;
     }
+
     10% {
         opacity: 0.2;
     }
+
     50% {
         opacity: 0.4;
     }
+
     100% {
         transform: translateY(-120vh) scale(1.2);
         opacity: 0;
@@ -146,13 +158,18 @@ body::before {
 }
 
 /* Container for Forms */
+/* Container for Forms - Glassmorphism */
 .container {
     background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 10px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 20px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 300px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 350px;
+    z-index: 10;
 }
 
 /* Input Fields */
@@ -196,22 +213,21 @@ input::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.sign-head
-{
+.sign-head {
     font-family: "Josefin Slab", serif;
     font-size: 30px;
-    font-weight:350;
-    color:rgb(246, 247, 249);
-    
+    font-weight: 350;
+    color: rgb(246, 247, 249);
+
 }
-.account
-{
+
+.account {
     font-family: "Josefin Slab", serif;
     color: rgba(255, 255, 255, 0.7);
 }
 
 .login {
-    color: #ffe063; 
+    color: #ffe063;
     font-family: "Josefin Slab", serif;
     text-decoration: none;
 }
@@ -220,6 +236,7 @@ input::placeholder {
     color: #fbad38;
     text-decoration: underline;
 }
+
 /* Back Button */
 .back-btn {
     position: absolute;

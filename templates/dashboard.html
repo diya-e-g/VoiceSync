@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dysfluency Analytics - Voice Sync</title>
+    <link rel="stylesheet" href="../static/page1.css" />
+    <link rel="stylesheet" href="../static/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Josefin+Slab:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="floating-shapes">
+        <span class="shape shape1"></span>
+        <span class="shape shape2"></span>
+        <span class="shape shape3"></span>
+        <span class="shape shape4"></span>
+        <span class="shape shape5"></span>
+    </div>
+
+    <a href="/index2.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <!-- Dashboard Content -->
+    <div class="glass-dashboard">
+        <h2 class="head" style="font-size: 50px; margin-bottom: 30px;">Your Analytics</h2>
+
+        <div class="stats-overview">
+            <div class="stat-box">
+                <i class="fas fa-cube stat-icon"></i>
+                <div class="stat-info">
+                    <span class="stat-title">Total Blocks</span>
+                    <span class="stat-value" id="blocks-count">0</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-redo stat-icon"></i>
+                <div class="stat-info">
+                    <span class="stat-title">Repetitions</span>
+                    <span class="stat-value" id="repetitions-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <h3 class="chart-title">Dysfluency Breakdown</h3>
+            <div class="chart-wrapper">
+                <canvas id="dysfluencyChart"></canvas>
+            </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetStats()">Reset Data</button>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let myChart;
+
+        function loadStats() {
+            const stats = JSON.parse(localStorage.getItem('dysfluencyStats')) || { blocks: 0, repetitions: 0 };
+            document.getElementById('blocks-count').innerText = stats.blocks;
+            document.getElementById('repetitions-count').innerText = stats.repetitions;
+
+            renderChart(stats.blocks, stats.repetitions);
+        }
+
+        function renderChart(blocks, repetitions) {
+            const ctx = document.getElementById('dysfluencyChart').getContext('2d');
+
+            // Destroy previous chart if exists
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Blocks', 'Repetitions'],
+                    datasets: [{
+                        label: 'Count',
+                        data: [blocks, repetitions],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white', font: { family: "'Josefin Slab', serif", size: 16 } }
+                        }
+                    },
+                    layout: { padding: 20 }
+                }
+            });
+        }
+
+        function resetStats() {
+            if (confirm("Are you sure you want to reset your daily statistics?")) {
+                localStorage.setItem('dysfluencyStats', JSON.stringify({ blocks: 0, repetitions: 0 }));
+                loadStats();
+            }
+        }
+
+        window.onload = loadStats;
+    </script>
+</body>
+
+</html>

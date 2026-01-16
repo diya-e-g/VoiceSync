@@ -1,0 +1,113 @@
+/* Inherit body styles from page1.css, but add specific styles for the cards */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    z-index: 10;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+body {
+    font-family: "Josefin Slab", serif;
+}
+
+.head {
+    font-family: "Josefin Slab", serif;
+    font-weight: lighter;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    width: 250px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+    /* Fast transform for smooth tilt */
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+
+    /* 3D Setup */
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shine effect/Highlight */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(108, 199, 218, 0.3);
+    /* Enhanced glow on hover */
+    /* Transform handled by JS */
+}
+
+.card-icon,
+.card h3,
+.card p {
+    transform: translateZ(30px);
+    /* Pop out elements */
+}
+
+.card-icon {
+    font-size: 50px;
+    margin-bottom: 20px;
+    color: #6cc7da;
+}
+
+.card h3 {
+    font-family: "Josefin Slab", serif;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-family: "Josefin Slab", serif;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: white;
+    text-decoration: none;
+    z-index: 20;
+    transition: transform 0.2s;
+    background: transparent;
+    /* Ensure clean look */
+    border: none;
+}
+
+.back-btn:hover {
+    transform: scale(1.1);
+}

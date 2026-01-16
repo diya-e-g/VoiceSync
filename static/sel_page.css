@@ -1,5 +1,6 @@
 /* Reset & Full Height */
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -8,30 +9,36 @@ html, body {
     justify-content: center;
     align-items: center;
     font-family: "Josefin Slab", serif;
-    
+
     /* Gradient Background */
-    background: linear-gradient(
-        270deg,
-        rgb(0, 2, 26),
-        rgb(0, 12, 60),
-        rgb(3, 27, 78),
-        rgb(6, 60, 130),
-        rgb(6, 199, 218)
-    );
+    background: linear-gradient(270deg,
+            rgb(0, 2, 26),
+            rgb(0, 12, 60),
+            rgb(3, 27, 78),
+            rgb(6, 60, 130),
+            rgb(6, 199, 218));
     background-size: 400% 400%;
     animation: gradientShift 8s ease infinite;
     position: relative;
     overflow: hidden;
 
     /*remove flexbox to avoid centering everything*/
-    display:block;
+    display: block;
 }
 
 /* Animated gradient shift */
 @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* White Overlay */
@@ -50,11 +57,19 @@ body::before {
 }
 
 @keyframes pulseShape {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(2deg); }
+
+    0%,
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(2deg);
+    }
 }
 
 /* Floating Shapes */
+/* Floating Shapes - 3D Orbs */
 .floating-shapes {
     position: fixed;
     top: 0;
@@ -69,22 +84,70 @@ body::before {
 .shape {
     position: fixed;
     bottom: -150px;
-    background: rgba(255, 255, 255, 0.15);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     animation: floatUp 10s linear infinite;
+    backdrop-filter: blur(5px);
 }
 
-.shape1 { left: 10%; width: 120px; height: 120px; animation-duration: 12s; }
-.shape2 { left: 30%; width: 80px; height: 80px; animation-duration: 9s; animation-delay: 2s; }
-.shape3 { left: 50%; width: 100px; height: 100px; animation-duration: 11s; animation-delay: 4s; }
-.shape4 { left: 70%; width: 130px; height: 130px; animation-duration: 14s; animation-delay: 1s; }
-.shape5 { left: 85%; width: 90px; height: 90px; animation-duration: 10s; animation-delay: 3s; }
+.shape1 {
+    left: 10%;
+    width: 120px;
+    height: 120px;
+    animation-duration: 12s;
+}
+
+.shape2 {
+    left: 30%;
+    width: 80px;
+    height: 80px;
+    animation-duration: 9s;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    animation-duration: 11s;
+    animation-delay: 4s;
+}
+
+.shape4 {
+    left: 70%;
+    width: 130px;
+    height: 130px;
+    animation-duration: 14s;
+    animation-delay: 1s;
+}
+
+.shape5 {
+    left: 85%;
+    width: 90px;
+    height: 90px;
+    animation-duration: 10s;
+    animation-delay: 3s;
+}
 
 @keyframes floatUp {
-    0% { transform: translateY(0) scale(1); opacity: 0; }
-    10% { opacity: 0.2; }
-    50% { opacity: 0.4; }
-    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-120vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+    }
 }
 
 /* FAQ Button */
@@ -123,10 +186,14 @@ body::before {
     box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
     text-align: center;
     width: 420px;
-    position: absolute; /* Absolute positioning */
-    top: 50%; /* Move down to 50% */
-    left: 50%; /* Move right to 50% */
-    transform: translate(-50%, -50%); /* Center perfectly */
+    position: absolute;
+    /* Absolute positioning */
+    top: 50%;
+    /* Move down to 50% */
+    left: 50%;
+    /* Move right to 50% */
+    transform: translate(-50%, -50%);
+    /* Center perfectly */
 }
 
 

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Mode - Voice Sync</title>
+    <link rel="stylesheet" href="../static/page1.css" />
+    <link rel="stylesheet" href="../static/practice.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="floating-shapes">
+        <span class="shape shape1"></span>
+        <span class="shape shape2"></span>
+        <span class="shape shape3"></span>
+        <span class="shape shape4"></span>
+        <span class="shape shape5"></span>
+    </div>
+
+    <a href="index1.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <h2 class="head" style="font-size: 80px; margin-bottom: 50px;">Practice Mode</h2>
+
+    <div class="container">
+        <!-- Job Interview Card -->
+        <div class="card" onclick="triggerUpload()">
+            <i class="fas fa-user-tie card-icon"></i>
+            <h3>Job Interview</h3>
+            <p>Upload your resume & practice answering questions.</p>
+            <input type="file" id="resumeUpload" style="display: none;" accept=".txt,.pdf,.doc,.docx"
+                onchange="handleResumeUpload(event)">
+        </div>
+
+        <!-- Ordering Coffee Card -->
+        <a href="chatbot.html?scenario=ordering_coffee" class="card">
+            <i class="fas fa-coffee card-icon"></i>
+            <h3>Ordering Coffee</h3>
+            <p>Simulate a casual conversation while ordering at a cafe.</p>
+        </a>
+
+        <!-- Public Speaking Card -->
+        <a href="chatbot.html?scenario=public_speaking" class="card">
+            <i class="fas fa-bullhorn card-icon"></i>
+            <h3>Public Speaking</h3>
+            <p>Practice delivering a speech or answering audience questions.</p>
+        </a>
+    </div>
+
+    <script>
+        function triggerUpload() {
+            document.getElementById('resumeUpload').click();
+        }
+
+        async function handleResumeUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('resume', file);
+
+            try {
+                // Show loading state
+                const response = await fetch('/upload_resume', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('resumeText', data.text); // Store resume text
+                    window.location.href = "chatbot.html?scenario=job_interview";
+                } else {
+                    alert("Failed to upload resume. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error uploading resume:", error);
+                alert("An error occurred while uploading. Proceeding without resume.");
+                window.location.href = "chatbot.html?scenario=job_interview";
+            }
+        }
+
+        // 3D Tilt Effect Logic
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Calculate rotation (-15deg to 15deg approx)
+                const xRotate = -((y - rect.height / 2) / rect.height) * 20;
+                const yRotate = ((x - rect.width / 2) / rect.width) * 20;
+
+                card.style.transform = `perspective(1000px) rotateX(${xRotate}deg) rotateY(${yRotate}deg) scale(1.05)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Reset on leave
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
+    </script>
+</body>
+
+</html>
